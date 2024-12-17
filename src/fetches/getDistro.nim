@@ -1,4 +1,4 @@
-from std/os import fileExists
+from std/posix_utils import osReleaseFile
 from std/parsecfg import loadConfig, getSectionValue
 from std/strutils import toLowerAscii
 
@@ -8,21 +8,19 @@ type
     version: string
 
 proc getDistro*(): Distro =
-  var os = system.hostOS
+  try:
+    # Read os-release file for linux & bsd distros
+    let
+      osInfo = osReleaseFile()
+      name = osInfo.getSectionValue("", "NAME")
+      version = osInfo.getSectionValue("", "VERSION_ID")
 
-  if os == "linux":
-    let osInfo = "/etc/os-release"
+    return (toLowerAscii(name), version)
+  except IOError:
+    let os = system.hostOS
 
-    if osInfo.fileExists():
-      let
-        cfg = osInfo.loadConfig
-        name = cfg.getSectionValue("", "NAME")
-        version = cfg.getSectionValue("", "VERSION_ID")
-
-      return (toLowerAscii(name), version)
+    case os
+    of "macosx":
+      return ("macos", "")
     else:
-      return ("", "")
-  elif os == "macosx":
-    return ("macos", "")
-  else:
-    return (system.hostOS, "")
+      return (os, "")
