@@ -1,5 +1,5 @@
 import
-  ./fetches/[getNames, getDistro, getKernel, getDesktop, getShell]
+  ./fetches/[getNames, getDistro, getKernel, getDesktop, getShell, getUptime]
 
 stdout.write("user ")
 echo getUsername(), "@", getHostname()
@@ -15,3 +15,6 @@ echo getShell()
 
 stdout.write("desktop ")
 echo getDesktop()
+
+stdout.write("uptime ")
+echo getUptime()
