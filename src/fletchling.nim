@@ -1,5 +1,5 @@
 import
-  ./fetches/[getDistro, getEnv]
+  ./fetches/[getDistro, getDesktop, getShell]
 
 stdout.write("os ")
 echo getDistro()
