@@ -2,8 +2,8 @@ from std/os import fileExists
 from std/posix_utils import uname
 from std/syncio import readFile
 from std/strutils import strip
-import
-  ../utils/[env, cmd]
+
+import ../utils/[env, cmd]
 
 
 proc getUsername*(): string =
@@ -11,7 +11,7 @@ proc getUsername*(): string =
 
   if username == "":
     return cmd.getCmdResult("whoami")
-  
+
   return username
 
 

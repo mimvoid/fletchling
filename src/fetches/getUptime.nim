@@ -1,6 +1,7 @@
-import std/[strutils, syncio]
 from std/os import fileExists
 from std/strformat import fmt
+import std/[strutils, syncio]
+
 
 proc getUptime*(): string =
   if "/proc/uptime".fileExists:

@@ -2,10 +2,12 @@ from std/posix_utils import osReleaseFile
 from std/parsecfg import loadConfig, getSectionValue
 from std/strutils import toLowerAscii
 
+
 type
   Distro = tuple
     name: string
     version: string
+
 
 proc getDistro*(): Distro =
   try:

@@ -1,5 +1,6 @@
 from std/posix_utils import uname
 
+
 proc getKernel*(): string =
   if system.hostOS == "haiku":
     try:

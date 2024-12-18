@@ -1,6 +1,9 @@
 import
-  ./fetches/[getNames, getDistro, getKernel, getDesktop, getShell, getUptime, getPackages],
+  ./fetches/[
+    getNames, getDistro, getKernel, getDesktop, getShell, getUptime, getPackages
+  ],
   ./art/logos
+
 
 echo getDistroArt()
 
@@ -8,7 +11,7 @@ stdout.write("user ")
 echo getUsername(), "@", getHostname()
 
 stdout.write("os ")
-echo getDistro()
+echo getDistro().name, " ", getDistro().version
 
 stdout.write("kernel ")
 echo getKernel()

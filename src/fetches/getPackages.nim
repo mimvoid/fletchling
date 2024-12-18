@@ -1,8 +1,10 @@
 from std/strutils import contains
+import std/strtabs
+
 import
-  std/strtabs,
   ./getDistro,
   ../utils/cmd
+
 
 func matchPkgCmd(): StringTableRef =
   let
@@ -27,7 +29,8 @@ func matchPkgCmd(): StringTableRef =
   for i in ["alpine", "postm"]:
     t[i] = apk
 
-  for i in ["android", "astra", "bian", "elementary", "mint", "mx", "ubuntu", "zorin", "kali"]:
+  for i in ["android", "astra", "bian", "elementary", "mint", "mx", "ubuntu",
+      "zorin", "kali"]:
     t[i] = dpkg
 
   for i in ["arc", "artix", "endeavor", "manjaro", "garuda", "msys2", "parabola"]:
@@ -37,6 +40,7 @@ func matchPkgCmd(): StringTableRef =
     t[i] = rpm
 
   return t
+
 
 proc getPackages*(): string =
   let

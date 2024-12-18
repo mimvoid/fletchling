@@ -1,5 +1,6 @@
 from std/osproc import execCmdEx
 
+
 proc getCmdResult*(cmd: string): string =
   let res = execCmdEx(cmd)
 
