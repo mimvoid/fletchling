@@ -1,9 +1,6 @@
-from std/strutils import rsplit
+from std/strutils import split
 import ../utils/env
 
 proc getShell*(): string =
-  let
-    shell = getEnvValues("SHELL")
-    base = rsplit(shell, "/", maxsplit=1)
-
-  return base[1]
+  let shell = getEnvValues("SHELL")
+  return shell.split("/")[^1]

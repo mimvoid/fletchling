@@ -1,8 +1,9 @@
 import std/[strutils, syncio]
+from std/os import fileExists
 from std/strformat import fmt
 
 proc getUptime*(): string =
-  try:
+  if "/proc/uptime".fileExists:
     let
       uptime = readFile("/proc/uptime").strip.split(".")[0]
       seconds = parseUInt(uptime)
@@ -17,6 +18,5 @@ proc getUptime*(): string =
       return fmt"{hours}h {minutes}m"
     else:
       return fmt"{days}d {hours}h {minutes}m"
-
-  except IOError:
+  else:
     return ""

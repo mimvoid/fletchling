@@ -1,15 +1,8 @@
-from std/osproc import execCmdEx
-import std/strtabs
-import ./getDistro
-
-proc getPkgs(cmd: string): string =
-  let pkgs = execCmdEx(cmd)
-
-  # Check the exit code
-  if pkgs[1] == 0:
-    return pkgs[0]
-  else:
-    return ""
+from std/strutils import contains
+import
+  std/strtabs,
+  ./getDistro,
+  ../utils/cmd
 
 func matchPkgCmd(): StringTableRef =
   let
@@ -31,7 +24,6 @@ func matchPkgCmd(): StringTableRef =
     "void": xbps
   }.newStringTable
 
-  # TODO: handle string prefixes & suffixes
   for i in ["alpine", "postm"]:
     t[i] = apk
 
@@ -51,7 +43,8 @@ proc getPackages*(): string =
     distro = getDistro().name
     t = matchPkgCmd()
 
-  if distro in t:
-    return getPkgs(t[distro])
-  else:
-    return ""
+  for k, v in t:
+    if not distro.contains(k): continue
+    return cmd.getCmdResult(v)
+
+  return ""

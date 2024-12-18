@@ -2,10 +2,18 @@ from std/os import fileExists
 from std/posix_utils import uname
 from std/syncio import readFile
 from std/strutils import strip
-import ../utils/env
+import
+  ../utils/[env, cmd]
+
 
 proc getUsername*(): string =
-  return getEnvValues("USERNAME", "USER", "LOGNAME")
+  let username = env.getEnvValues("USERNAME", "USER", "LOGNAME")
+
+  if username == "":
+    return cmd.getCmdResult("whoami")
+  
+  return username
+
 
 proc getHostname*(): string =
   let hostFile = "/etc/hostname"
