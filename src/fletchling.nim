@@ -1,5 +1,8 @@
 import
-  ./fetches/[getNames, getDistro, getKernel, getDesktop, getShell, getUptime, getPackages]
+  ./fetches/[getNames, getDistro, getKernel, getDesktop, getShell, getUptime, getPackages],
+  ./art/logos
+
+echo getDistroArt()
 
 stdout.write("user ")
 echo getUsername(), "@", getHostname()
