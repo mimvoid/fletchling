@@ -10,19 +10,20 @@ type
 
 
 proc getDistro*(): Distro =
-  try:
-    # Read os-release file for linux & bsd distros
-    let
-      osInfo = osReleaseFile()
-      name = osInfo.getSectionValue("", "NAME")
-      version = osInfo.getSectionValue("", "VERSION_ID")
+  const os = system.hostOS
 
-    return (toLowerAscii(name), version)
-  except IOError:
-    let os = system.hostOS
+  when os == "windows":
+    return (os, "")
+  elif os == "macosx":
+    return ("macos", "")
+  else:
+    try:
+      # Read os-release file for linux & bsd distros
+      let
+        osInfo = osReleaseFile()
+        name = osInfo.getSectionValue("", "NAME")
+        version = osInfo.getSectionValue("", "VERSION_ID")
 
-    case os
-    of "macosx":
-      return ("macos", "")
-    else:
+      return (toLowerAscii(name), version)
+    except IOError:
       return (os, "")

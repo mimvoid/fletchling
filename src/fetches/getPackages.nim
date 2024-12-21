@@ -1,13 +1,11 @@
 from std/strutils import contains
 import std/strtabs
 
-import
-  ./getDistro,
-  ../utils/fetch
+import ../utils/fetch
 
 
-func matchPkgCmd(): StringTableRef =
-  let
+func mapPkgCmd(): StringTableRef =
+  const
     apk = "apk info 2>/dev/null | wc -l"
     dpkg = "dpkg -l 2>/dev/null | grep -c \"^ii\""
     pacman = "pacman -Qq 2>/dev/null | wc -l"
@@ -18,7 +16,7 @@ func matchPkgCmd(): StringTableRef =
     slack = "find /var/log/packages -mindepth 1 -maxdepth 1 2>/dev/null | wc -l"
     xbps = "xbps-query -l 2>/dev/null | wc -l"
 
-  var t = {
+  let t = {
     "gentoo": emerge,
     "haiku": pkgman,
     "nixos": nix,
@@ -29,8 +27,9 @@ func matchPkgCmd(): StringTableRef =
   for i in ["alpine", "postm"]:
     t[i] = apk
 
-  for i in ["android", "astra", "bian", "elementary", "mint", "mx", "ubuntu",
-      "zorin", "kali"]:
+  for i in [
+    "android", "astra", "bian", "elementary", "mint", "mx", "ubuntu", "zorin", "kali"
+  ]:
     t[i] = dpkg
 
   for i in ["arc", "artix", "endeavor", "manjaro", "garuda", "msys2", "parabola"]:
@@ -42,13 +41,17 @@ func matchPkgCmd(): StringTableRef =
   return t
 
 
-proc getPackages*(): string =
-  let
-    distro = getDistro().name
-    t = matchPkgCmd()
-
+func matchPkgCmd(distro: string, t: StringTableRef): string =
   for k, v in t:
-    if not distro.contains(k): continue
-    return getCmdResult(v)
+    if distro.contains(k):
+      return v
 
   return ""
+
+
+proc getPackages*(distro: string): string =
+  let cmd = matchPkgCmd(distro, mapPkgCmd())
+
+  if cmd == "":
+    return ""
+  return getCmdResult(cmd)

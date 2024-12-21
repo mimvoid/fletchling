@@ -41,7 +41,7 @@ let fetchResults = [
   getDesktop(),
   getShell(),
   getUptime(),
-  getPackages(),
+  getPackages(distro),
   "",
   ""
 ]

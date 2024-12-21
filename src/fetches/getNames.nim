@@ -16,7 +16,7 @@ proc getUsername*(): string =
 
 
 proc getHostname*(): string =
-  let hostFile = "/etc/hostname"
+  const hostFile = "/etc/hostname"
 
   if hostFile.fileExists():
     return readFile(hostFile).strip

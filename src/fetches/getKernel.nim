@@ -2,7 +2,9 @@ from std/posix_utils import uname
 
 
 proc getKernel*(): string =
-  if system.hostOS == "haiku":
+  const os = system.hostOS
+
+  when os == "haiku":
     try:
       return uname().version
     except OSError:
