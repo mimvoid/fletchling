@@ -2,7 +2,7 @@ import
   ./fetches/[
     getNames, getDistro, getKernel, getDesktop, getShell, getUptime, getPackages
   ],
-  ./art/logos
+  ./print/art
 
 
 echo getDistroArt()
