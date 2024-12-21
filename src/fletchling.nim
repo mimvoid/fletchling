@@ -1,29 +1,50 @@
+from std/sequtils import zip
+from std/sugar import dump
+
 import
   ./fetches/[
     getNames, getDistro, getKernel, getDesktop, getShell, getUptime, getPackages
   ],
-  ./print/art
+  ./print/[art, text],
+  ./config/vars,
+  ./utils/style
 
 
-echo getDistroArt()
+let
+  monoArt = getDistroArt(styled = false)
+  ansiArt = getDistroArt(styled = true)
 
-stdout.write("user ")
-echo getUsername(), "@", getHostname()
+var finalArt = ansiArt
+if vars.noColor:
+  finalArt = monoArt
 
-stdout.write("os ")
-echo getDistro().name, " ", getDistro().version
 
-stdout.write("kernel ")
-echo getKernel()
+let
+  categories = styledCategories()
+  longer = longestItem(@[monoArt, categories])
+  artPadding = seqPad(len(longer), monoArt)
 
-stdout.write("shell ")
-echo getShell()
+finalArt = artPadding[0] & finalArt
 
-stdout.write("desktop ")
-echo getDesktop()
+if longer == categories:
+  finalArt &= artPadding
 
-stdout.write("uptime ")
-echo getUptime()
 
-stdout.write("packages ")
-echo getPackages()
+let fetchResults = [
+  "",
+  getUsername() & "@" & getHostname(),
+  getDistro().name & " " & getDistro().version,
+  getKernel(),
+  getShell(),
+  getDesktop(),
+  getUptime(),
+  getPackages(),
+  "",
+  ""
+]
+
+
+echo ""
+
+for i in zip(finalArt, zip(categories, fetchResults)):
+  stdout.writeLine(i[0], "  ", i[1][0], " ", i[1][1])
