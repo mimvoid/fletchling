@@ -1,15 +1,10 @@
 import std/[tables, strutils, terminal, sugar]
-from ../utils/style import col
-
-
-const
-  blue = col(fgBlue, bright = true, bold = true)
-  cyan = col(fgCyan, bright = true, bold = true)
+from ../utils/colors import fgBrBd
 
 
 func nixosArt(): seq[string] =
   const
-    art = r"""
+    art = """
 $1     $1\\    $2\\  //    $3
 $1      \\    $2\\//     $3
 $1  ::::://====$2\\  $1//  $3
@@ -19,12 +14,15 @@ $2   //  $1\\$2====//::::: $3
 $1      //\\    $2\\     $3
 $1     //  \\    $2\\    $3"""
 
+    blue = fgBrBd.bl
+    cyan = fgBrBd.cy
+
     l = collect:
       for i in splitLines(art): i % [blue, cyan, ansiResetCode]
 
   return l
 
 
-var art* = {
+let art* = {
   "nixos": nixosArt()
 }.toTable

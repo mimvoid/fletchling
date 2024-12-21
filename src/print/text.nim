@@ -6,22 +6,16 @@ from std/strutils import repeat, join
 
 import std/terminal
 
-import
-  ../config/vars,
-  ../utils/style
+from ../utils/colors import fg, fgBr, fgBd
+import ../utils/seq
 
 
 const
-  cyan = col(fgCyan)
-  bRed = col(fgRed, bold = true)
-  bGreen = col(fgGreen, bold = true)
-  bYellow = col(fgYellow, bold = true)
-  bCyan = col(fgCyan, bold = true)
-  bBlue = col(fgBlue, bold = true)
-  bMagenta = col(fgMagenta, bold = true)
+  fgList = [fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk]
+  border = ["─", "│", "─", "│", "╭", "╮", "╯", "╰"]
 
 
-proc categories(): seq[string] =
+func categories(nerdFont: bool): seq[string] =
   const
     icons = ["", "󰌽", "", "", "", "󰥔", "󰏔"]
     names = ["user", "os", "kernel", "desktop", "shell", "uptime", "pkgs"]
@@ -40,29 +34,27 @@ func palette(): string =
     icon = ""
 
     paletteIcons = collect:
-      for i in [fgWhite, fgRed, fgGreen, fgYellow, fgBlue, fgMagenta, fgCyan, fgBlack]:
-        ansiResetCode & col(i, bright = true) & icon & ansiResetCode
+      for i in fgList: i & icon & ansiResetCode
 
   return join(paletteIcons, " ")
 
 
-proc styledCategories*(): seq[string] =
+func styledCategories*(nerdFont: bool): seq[string] =
   const
-    colors = [bRed, bYellow, bCyan, bGreen, bBlue, bMagenta, bYellow]
-    border = ["─", "│", "─", "│", "╭", "╮", "╯", "╰"]
     palette = " " & palette()
+    colors = [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]
 
   let
     colBorder = collect:
-      for i in border: cyan & i & ansiResetCode
+      for i in border: fg.cy & i & ansiResetCode
 
-    cats = categories()
+    cats = categories(nerdFont)
     width = runeLen(longestItem(cats))
 
-    topBorder = cyan & border[4] & repeat(border[0], width + 2) & border[5] & ansiResetCode
-    bottomBorder = cyan & border[7] & repeat(border[2], width + 2) & border[6] & ansiResetCode
+    topBorder = fg.cy & border[4] & repeat(border[0], width + 2) & border[5] & ansiResetCode
+    bottomBorder = fg.cy & border[7] & repeat(border[2], width + 2) & border[6] & ansiResetCode
 
-    coloredCats = collect(newSeq):
+    coloredCats = collect:
       for i in zip(colors, cats):
         fmt"{colBorder[1]} {i[0]}{alignLeft(i[1], width)}{ansiResetCode} {colBorder[3]}"
 

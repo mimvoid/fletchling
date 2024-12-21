@@ -1,5 +1,6 @@
 from std/osproc import execCmdEx
 from std/strutils import strip
+from std/envvars import existsEnv, getEnv
 
 
 proc getCmdResult*(cmd: string): string =
@@ -10,3 +11,11 @@ proc getCmdResult*(cmd: string): string =
     return res[0].strip
   else:
     return ""
+
+
+proc getEnvValues*(envVars: varargs[string]): string =
+  for i in items(envVars):
+    if not existsEnv(i): continue
+    return getEnv(i)
+
+  return ""

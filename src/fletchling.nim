@@ -1,5 +1,5 @@
-from std/sequtils import zip
-from std/sugar import dump
+from std/sequtils import repeat, zip
+from std/strutils import spaces
 
 import
   ./fetches/[
@@ -7,33 +7,36 @@ import
   ],
   ./print/[art, text],
   ./config/vars,
-  ./utils/style
+  ./utils/seq
 
 
 let
-  monoArt = getDistroArt(styled = false)
-  ansiArt = getDistroArt(styled = true)
+  (distro, version) = getDistro()
 
-var finalArt = ansiArt
-if vars.noColor:
-  finalArt = monoArt
+  monoArt = getMonoArt(distro)
+  styledArt = getStyledArt(distro)
+
+  artPad = spaces(len(longestItem(monoArt)))
+
+var finalArt =
+  if vars.noColor: monoArt
+  else: styledArt
+
+finalArt = @[artPad] & finalArt
 
 
 let
-  categories = styledCategories()
+  categories = styledCategories(vars.nerdFont)
   longer = longestItem(@[monoArt, categories])
-  artPadding = seqPad(len(longer), monoArt)
-
-finalArt = artPadding[0] & finalArt
 
 if longer == categories:
-  finalArt &= artPadding
+  finalArt &= artPad.repeat(len(categories) - len(finalArt))
 
 
 let fetchResults = [
   "",
   getUsername() & "@" & getHostname(),
-  getDistro().name & " " & getDistro().version,
+  distro & " " & version,
   getKernel(),
   getDesktop(),
   getShell(),
@@ -46,5 +49,5 @@ let fetchResults = [
 
 echo ""
 
-for i in zip(finalArt, zip(categories, fetchResults)):
-  stdout.writeLine(i[0], "  ", i[1][0], " ", i[1][1])
+for (art, text) in zip(finalArt, zip(categories, fetchResults)):
+  echo art, "  ", text[0], " ", text[1]

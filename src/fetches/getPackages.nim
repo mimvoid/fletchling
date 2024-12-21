@@ -3,7 +3,7 @@ import std/strtabs
 
 import
   ./getDistro,
-  ../utils/cmd
+  ../utils/fetch
 
 
 func matchPkgCmd(): StringTableRef =
@@ -49,6 +49,6 @@ proc getPackages*(): string =
 
   for k, v in t:
     if not distro.contains(k): continue
-    return cmd.getCmdResult(v)
+    return getCmdResult(v)
 
   return ""

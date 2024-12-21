@@ -2,11 +2,11 @@ from std/tables import toTable
 from std/strutils import splitLines, alignLeft
 from std/sugar import collect
 
-from ../utils/style import longestItem
+import ../utils/seq
 
 
 const
-  nixosArt* = r"""
+  nixosArt* = """
      \\    \\  //
       \\    \\//
   ::::://====\\  //
@@ -19,15 +19,15 @@ const
 
 func process(artStr: string): seq[string] =
   let
-    artLines = splitLines(artStr)
-    length = len(longestItem(artLines))
+    lines = splitLines(artStr)
+    width = len(longestItem(lines))
 
     aligned = collect:
-      for i in artLines: alignLeft(i, length)
+      for i in lines: alignLeft(i, width)
 
   return aligned
 
 
-var art* = {
+let art* = {
   "nixos": process(nixosArt)
 }.toTable

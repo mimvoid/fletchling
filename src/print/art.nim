@@ -1,17 +1,10 @@
 import std/tables
-
-import
-  ./[monoArt, styledArt],
-  ../fetches/getDistro
+import ./[monoArt, styledArt]
 
 
-proc getDistroArt*(styled: bool): seq[string] =
-  let distro = getDistro().name
+proc getMonoArt*(distro: string): seq[string] =
+  return getOrDefault(monoArt.art, distro)
 
-  if styled and distro in styledArt.art:
-    return styledArt.art[distro]
 
-  if not styled and distro in monoArt.art:
-    return monoArt.art[distro]
-
-  return @[]
+proc getStyledArt*(distro: string): seq[string] =
+  return getOrDefault(styledArt.art, distro)

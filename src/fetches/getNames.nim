@@ -3,14 +3,14 @@ from std/posix_utils import uname
 from std/syncio import readFile
 from std/strutils import strip
 
-import ../utils/[env, cmd]
+import ../utils/fetch
 
 
 proc getUsername*(): string =
-  let username = env.getEnvValues("USERNAME", "USER", "LOGNAME")
+  let username = getEnvValues("USERNAME", "USER", "LOGNAME")
 
   if username == "":
-    return cmd.getCmdResult("whoami")
+    return getCmdResult("whoami")
 
   return username
 

@@ -1,5 +1,5 @@
 from std/strutils import toLowerAscii
-import ../utils/env
+import ../utils/fetch
 
 
 proc getDesktop*(): string =

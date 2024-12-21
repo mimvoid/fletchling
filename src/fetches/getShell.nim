@@ -1,5 +1,5 @@
 from std/strutils import split
-import ../utils/env
+import ../utils/fetch
 
 
 proc getShell*(): string =
