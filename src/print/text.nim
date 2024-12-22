@@ -6,56 +6,65 @@ from std/strutils import repeat, join
 
 import std/terminal
 
+from ./elems import border, borderColor, groupIcons, groupNames, paletteIcon
 from ../utils/colors import fg, fgBr, fgBd
 import ../utils/seq
 
 
-const
-  fgList = [fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk]
-  border = ["─", "│", "─", "│", "╭", "╮", "╯", "╰"]
+const fgList = [fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk]
 
 
-func categories(nerdFont: bool): seq[string] =
-  const
-    icons = ["", "󰌽", "", "", "", "󰥔", "󰏔"]
-    names = ["user", "os", "kernel", "desktop", "shell", "uptime", "pkgs"]
-
+func groups(nerdFont: bool): seq[string] =
   if not nerdFont:
-    return @names
+    return @groupNames
 
   let groups = collect:
-    for i in zip(icons, names): i[0] & " " & i[1]
+    for (icon, group) in zip(groupIcons, groupNames):
+      icon & " " & group
 
   return groups
 
 
 func palette(): string =
-  const
-    icon = ""
-
-    paletteIcons = collect:
-      for i in fgList: i & icon & ansiResetCode
+  const paletteIcons = collect:
+    for i in fgList: i & paletteIcon & ansiResetCode
 
   return join(paletteIcons, " ")
 
 
-func styledCategories*(nerdFont: bool): seq[string] =
+func styleBorder(colorCode: string, side: string, width: int = 0): string =
+  let text =
+    if side == "left":
+      border[3]
+    elif side == "right":
+      border[1]
+    elif side == "top":
+      border[4] & repeat(border[0], width + 2) & border[5]
+    elif side == "bottom":
+      border[7] & repeat(border[2], width + 2) & border[6]
+    else:
+      raise newException(ValueError, "Not a valid side value")
+
+  return borderColor & text & ansiResetCode
+
+
+func styledGroups*(nerdFont: bool): seq[string] =
   const
     palette = " " & palette()
     colors = [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]
 
+    borderLeft = styleBorder(borderColor, "left")
+    borderRight = styleBorder(borderColor, "right")
+
   let
-    colBorder = collect:
-      for i in border: fg.cy & i & ansiResetCode
+    groupList = groups(nerdFont)
+    width = runeLen(longestItem(groupList))
 
-    cats = categories(nerdFont)
-    width = runeLen(longestItem(cats))
+    borderTop = styleBorder(borderColor, "top", width)
+    borderBottom = styleBorder(borderColor, "bottom", width)
 
-    topBorder = fg.cy & border[4] & repeat(border[0], width + 2) & border[5] & ansiResetCode
-    bottomBorder = fg.cy & border[7] & repeat(border[2], width + 2) & border[6] & ansiResetCode
+    coloredGroups = collect:
+      for (c, g) in zip(colors, groupList):
+        borderLeft & " " & c & alignLeft(g, width) & ansiResetCode & " " & borderRight
 
-    coloredCats = collect:
-      for i in zip(colors, cats):
-        fmt"{colBorder[1]} {i[0]}{alignLeft(i[1], width)}{ansiResetCode} {colBorder[3]}"
-
-  return @[topBorder] & coloredCats & @[bottomBorder, palette]
+  return @[borderTop] & coloredGroups & @[borderBottom, palette]

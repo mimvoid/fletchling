@@ -26,11 +26,11 @@ finalArt = @[artPad] & finalArt
 
 
 let
-  categories = styledCategories(vars.nerdFont)
-  longer = longestItem(@[monoArt, categories])
+  groups = styledGroups(vars.nerdFont)
+  longer = longestItem(@[monoArt, groups])
 
-if longer == categories:
-  finalArt &= artPad.repeat(len(categories) - len(finalArt))
+if longer == groups:
+  finalArt &= artPad.repeat(len(groups) - len(finalArt))
 
 
 let fetchResults = [
@@ -49,5 +49,5 @@ let fetchResults = [
 
 echo ""
 
-for (art, text) in zip(finalArt, zip(categories, fetchResults)):
+for (art, text) in zip(finalArt, zip(groups, fetchResults)):
   echo art, "  ", text[0], " ", text[1]

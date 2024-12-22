@@ -9,8 +9,8 @@ proc getCmdResult*(cmd: string): string =
   # Check the exit code
   if res[1] == 0:
     return res[0].strip
-  else:
-    return ""
+
+  return ""
 
 
 proc getEnvValues*(envVars: varargs[string]): string =
