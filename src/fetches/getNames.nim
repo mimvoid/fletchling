@@ -3,6 +3,8 @@ from std/posix_utils import uname
 from std/syncio import readFile
 from std/strutils import strip
 
+import std/parsecfg
+
 import ../utils/fetch
 
 
@@ -16,10 +18,15 @@ proc getUsername*(): string =
 
 
 proc getHostname*(): string =
-  const hostFile = "/etc/hostname"
+  const
+    hostFile = "/etc/hostname"
+    hostRc = "/etc/conf.d/hostname"
 
   if hostFile.fileExists():
     return readFile(hostFile).strip
+
+  if hostRc.fileExists():
+    return loadConfig(hostRc).getSectionValue("", "hostname")
 
   try:
     return uname().nodename

@@ -2,6 +2,8 @@ from std/posix_utils import osReleaseFile
 from std/parsecfg import loadConfig, getSectionValue
 from std/strutils import toLowerAscii
 
+from ../utils/fetch import getCmdResult
+
 
 type
   Distro = tuple
@@ -12,10 +14,14 @@ type
 proc getDistro*(): Distro =
   const os = system.hostOS
 
-  when os == "windows":
-    return (os, "")
-  elif os == "macosx":
-    return ("macos", "")
+  when os == "macosx":
+    let version = getCmdResult("sw_vers -productVersion")
+    return ("macos", version)
+
+  elif os == "windows":
+    let version = getCmdResult("wmic os get caption").split("\r\r\n")[1]
+    return (os, version)
+
   else:
     try:
       # Read os-release file for linux & bsd distros
