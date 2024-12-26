@@ -11,6 +11,7 @@ from ../utils/colors import fg, fgBr, fgBd
 import ../utils/seq
 
 
+# TODO: make less reptitive
 const fgList = [fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk]
 
 
@@ -32,20 +33,19 @@ func palette(): string =
   return join(paletteIcons, " ")
 
 
-func styleBorder(colorCode: string, side: string, width: int = 0): string =
-  let text =
-    if side == "left":
-      border[3]
-    elif side == "right":
-      border[1]
-    elif side == "top":
-      border[4] & repeat(border[0], width + 2) & border[5]
-    elif side == "bottom":
-      border[7] & repeat(border[2], width + 2) & border[6]
-    else:
-      raise newException(ValueError, "Not a valid side value")
+func styleBorder(colorCode: string, width: int = 0): seq[string] =
+  let
+    sides = [
+      border[3],  # left
+      border[1],  # right
+      border[4] & repeat(border[0], width + 2) & border[5],  # top
+      border[7] & repeat(border[2], width + 2) & border[6]  # bottom
+    ]
 
-  return borderColor & text & ansiResetCode
+    coloredSides = collect:
+      for i in sides: colorCode & i & ansiResetCode
+
+  return coloredSides
 
 
 func styledGroups*(nerdFont: bool): seq[string] =
@@ -53,18 +53,14 @@ func styledGroups*(nerdFont: bool): seq[string] =
     palette = " " & palette()
     colors = [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]
 
-    borderLeft = styleBorder(borderColor, "left")
-    borderRight = styleBorder(borderColor, "right")
-
   let
     groupList = groups(nerdFont)
     width = runeLen(longestItem(groupList))
 
-    borderTop = styleBorder(borderColor, "top", width)
-    borderBottom = styleBorder(borderColor, "bottom", width)
+    sides = styleBorder(borderColor, width)
 
     coloredGroups = collect:
       for (c, g) in zip(colors, groupList):
-        borderLeft & " " & c & alignLeft(g, width) & ansiResetCode & " " & borderRight
+        sides[0] & " " & c & alignLeft(g, width) & ansiResetCode & " " & sides[1]
 
-  return @[borderTop] & coloredGroups & @[borderBottom, palette]
+  return @[sides[2]] & coloredGroups & @[sides[3], palette]
