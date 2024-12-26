@@ -1,31 +1,27 @@
 {
-  description = "Flake for Nim dev environment";
+  description = "Flake for fletchling";
 
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-  };
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
   outputs = { self, nixpkgs }:
     let
-      allSystems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+      allSystems = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.all;
 
-      forAllSystems = f: nixpkgs.lib.genAttrs allSystems (system: f {
+      forAllSystems = f: allSystems (system: f {
         pkgs = import nixpkgs { inherit system; };
       });
     in
     {
       packages = forAllSystems ({ pkgs }: {
-        default = pkgs.callPackage ./package.nix { };
+        default = pkgs.callPackage ./nix { };
       });
 
       devShells = forAllSystems ({ pkgs }: {
         default = pkgs.mkShell {
-          packages = with pkgs; [ nim ];
+          packages = with pkgs; [
+            nim
+            nimble
+          ];
         };
       });
     };
