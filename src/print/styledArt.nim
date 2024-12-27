@@ -7,6 +7,7 @@ from ../utils/colors import fgBrBd
 
 func nixosArt(): seq[string] =
   const
+    # by: q60 (from disfetch)
     art = """
 $1     $1\\    $2\\  //    $3
 $1      \\    $2\\//     $3

@@ -9,6 +9,7 @@ import ../utils/seq
 
 
 const
+  # by: q60 (from disfetch)
   nixosArt* = """
      \\    \\  //
       \\    \\//
