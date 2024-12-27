@@ -7,16 +7,16 @@
     let
       allSystems = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.all;
 
-      forAllSystems = f: allSystems (system: f {
-        pkgs = import nixpkgs { inherit system; };
-      });
+      toSystems = passPkgs: allSystems (system:
+        passPkgs (import nixpkgs { inherit system; })
+      );
     in
     {
-      packages = forAllSystems ({ pkgs }: {
+      packages = toSystems (pkgs: {
         default = pkgs.callPackage ./nix { };
       });
 
-      devShells = forAllSystems ({ pkgs }: {
+      devShells = toSystems (pkgs: {
         default = pkgs.mkShell {
           packages = with pkgs; [
             nim
