@@ -2,22 +2,56 @@
 
 # `fletchling`
 
-A fetcher written in [Nim](https://nim-lang.org)
+A light and stylish fetcher written in [Nim](https://nim-lang.org)
+
+![Screenshot of fletchling on NixOS](assets/fletchling.png)
 
 </div>
 
+# Introduction
+
+`fletchling` is a system information fetcher that seeks to be fast and
+light. While small, it's also customizable and gets the job done
+with style.
+
+It uses what Nim has to offer to its advantage:
+
+- Small executable size
+- Dependency-free
+- Quick performance
+
+> [!note]
+> `fletchling` is in alpha and in heavy development.
+> I regularly use it on NixOS, but it's not guaranteed to work
+> on other systems yet.
+
 # Why `fletchling`?
 
-`fletchling` started as a way for me to practice POSIX shell.
-But since I disliked the syntax, I rewrote it to practice Nim instead.
+`fletchling` started as my first program in POSIX shell.
+The language and syntax weren't quite the right tools for the job
+as it grew in complexity, so I rewrote it to start learning Nim instead.
 
 Hence, the portmanteau of "fetch" and "fledgling."
+
+# Installation
+
+## Nimble
+
+_TODO_
+
+## NixOS
+
+_TODO_
 
 ---
 
 # Special Thanks
 
-- [nitch](https://github.com/ssleert/nitch)
-- [disfetch](https://github.com/q60/disfetch)
+I want to give my thanks to [nitch](https://github.com/ssleert/nitch) for
+being my first introduction to Nim and a major inspiration for this project.
+
+Other notable mentions:
+
+- [disfetch](https://github.com/q60/disfetch), which inspired the previous POSIX shell version
 - [diyfetch](https://github.com/info-mono/diyfetch)
 - [fetchutils](https://github.com/kiedtl/fetchutils)
