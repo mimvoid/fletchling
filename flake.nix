@@ -16,6 +16,10 @@
         default = pkgs.callPackage ./nix { };
       });
 
+      overlay = final: prev: {
+        fletchling = prev.pkgs.callPackage ./nix { };
+      };
+
       devShells = toSystems (pkgs: {
         default = pkgs.mkShell {
           packages = with pkgs; [
