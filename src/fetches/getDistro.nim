@@ -1,3 +1,5 @@
+## Fetches the distro name and version
+
 from std/posix_utils import osReleaseFile
 from std/parsecfg import loadConfig, getSectionValue
 from std/strutils import toLowerAscii

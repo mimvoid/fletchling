@@ -1,3 +1,6 @@
+## Defines ASCII art and applies ANSI codes for color.
+## Maps the art as string sequences to distro names.
+
 import std/[tables, strutils, terminal, sugar]
 from ../utils/colors import fgBrBd
 

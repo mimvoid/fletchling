@@ -1,3 +1,5 @@
+## Fetches the kernel version
+
 from std/posix_utils import uname
 from std/os import fileExists
 from std/syncio import readFile

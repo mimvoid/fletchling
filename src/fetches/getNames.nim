@@ -1,3 +1,5 @@
+## Fetches the username and hostname
+
 from std/os import fileExists
 from std/posix_utils import uname
 from std/syncio import readFile

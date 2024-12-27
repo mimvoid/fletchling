@@ -1,3 +1,5 @@
+## Fetches the package count of the distro's main package manager
+
 from std/strutils import contains, splitLines
 import std/strtabs
 

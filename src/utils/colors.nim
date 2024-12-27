@@ -1,9 +1,14 @@
+## Helpers for styling
+
 import std/terminal
 
 
 func col(
   fg: ForegroundColor = fgDefault, bright: bool = false, bold: bool = false
 ): string =
+  ## Returns the ANSI codes to reset styling and apply foreground color
+  ## Optionally adds a bold style code
+
   let fore = ansiForegroundColorCode(fg, bright)
 
   if bold:
@@ -12,12 +17,13 @@ func col(
   return ansiResetCode & fore
 
 
-# ANSI colors: red, green, yellow, blue, magenta, cyan, white, black
 type
   Colors = tuple
+    ## ANSI colors: red, green, yellow, blue, magenta, cyan, white, black
     rd, gn, yw, bl, ma, cy, wh, bk: string
 
 
+# TODO: make less repetitive
 func colorList(bright: bool = false, bold: bool = false): Colors =
   return (
     rd: col(fgRed, bright, bold),

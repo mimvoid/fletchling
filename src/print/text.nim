@@ -1,3 +1,5 @@
+## Formats, styles, and puts together `fletchling`'s text
+
 from std/sugar import collect
 from std/sequtils import zip
 from std/unicode import alignLeft, runeLen
@@ -16,6 +18,9 @@ const fgList = [fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, f
 
 
 func groups(nerdFont: bool): seq[string] =
+  ## If nerd fonts are enabled, returns strings of group names with icons.
+  ## If not, only returns the group names.
+
   if not nerdFont:
     return @groupNames
 
@@ -27,6 +32,8 @@ func groups(nerdFont: bool): seq[string] =
 
 
 func palette(): string =
+  ## Applies foreground colors to display on each copy of an icon.
+
   const paletteIcons = collect:
     for i in fgList: i & paletteIcon & ansiResetCode
 
@@ -34,6 +41,11 @@ func palette(): string =
 
 
 func styleBorder(colorCode: string, width: int = 0): seq[string] =
+  ## Returns a sequence of strings defining a border:
+  ##
+  ## The full top and bottom edge, and individual characters for
+  ## the left and right edge.
+
   let
     sides = [
       border[3],  # left
@@ -49,6 +61,8 @@ func styleBorder(colorCode: string, width: int = 0): seq[string] =
 
 
 func styledGroups*(nerdFont: bool): seq[string] =
+  ## Puts the group names, border, and palette together.
+
   const
     palette = " " & palette()
     colors = [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]

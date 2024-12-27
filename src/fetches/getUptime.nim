@@ -1,9 +1,14 @@
+## Fetches and formats the uptime
+
 from std/os import fileExists
 from std/strformat import fmt
 import std/[strutils, syncio]
 
 
 func formatTime(seconds: Natural): string =
+  ## Formats seconds into minutes, hours, and days.
+  ## Example: 1d 9h 42m
+
   let
     minutes = seconds div 60 mod 60
     hours = seconds div 3600 mod 24

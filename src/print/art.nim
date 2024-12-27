@@ -1,3 +1,6 @@
+## Procedures to get the art for a distro's name.
+## If none are found, return an empty sequence.
+
 import std/tables
 import ./[monoArt, styledArt]
 

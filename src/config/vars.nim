@@ -1,3 +1,8 @@
+## Defines default configuration settings and checks for custom settings.
+##
+## In level of importance:
+## Default values < Config file < Commandline arguments
+
 from std/os import fileExists
 from std/appdirs import getConfigDir
 import std/[strutils, paths, parsecfg]

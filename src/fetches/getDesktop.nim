@@ -1,3 +1,5 @@
+## Fetches the desktop environment or window manager
+
 from std/strutils import toLowerAscii
 import ../utils/fetch
 
