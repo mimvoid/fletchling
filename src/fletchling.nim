@@ -19,7 +19,7 @@ let
   styledArt = getStyledArt(distro)
 
   # Spaces the same width as the art, used for printing
-  artPad = spaces(len(longestItem(monoArt)))
+  artPad = spaces(maxLen(monoArt))
 
 var finalArt =
   if vars.noColor: monoArt

@@ -27,7 +27,7 @@ func process(artStr: string): seq[string] =
 
   let
     lines = splitLines(artStr)
-    width = len(longestItem(lines))
+    width = maxLen(lines)
 
     aligned = collect:
       for i in lines: alignLeft(i, width)
