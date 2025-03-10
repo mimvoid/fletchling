@@ -4,10 +4,8 @@ from std/sequtils import repeat, zip
 from std/strutils import spaces
 
 import
-  ./fetches/[
-    getNames, getDistro, getKernel, getDesktop, getShell, getUptime, getPackages
-  ],
-  ./print/[art, text],
+  ./fetches/getDistro,
+  ./print/[art, text, fetchResults],
   ./config/vars,
   ./utils/seq
 
@@ -15,7 +13,7 @@ import
 # Art
 
 let
-  (distro, version) = getDistro()
+  (distro, _) = getDistro()
 
   monoArt = getMonoArt(distro)
   styledArt = getStyledArt(distro)
@@ -42,27 +40,10 @@ if longer == groups:
   finalArt &= artPad.repeat(len(groups) - len(finalArt))
 
 
-# Fetch results
-
-# Empty strings as padding to align with the group names and palette
-let fetchResults = [
-  "",
-  getUsername() & "@" & getHostname(),
-  distro & " " & version,
-  getKernel(),
-  getDesktop(),
-  getShell(),
-  getUptime(),
-  getPackages(distro),
-  "",
-  ""
-]
-
-
 # Printing
 
 # Leading line as extra space before content
 echo ""
 
-for (art, text) in zip(finalArt, zip(groups, fetchResults)):
+for (art, text) in zip(finalArt, zip(groups, fetchResults())):
   echo art, "  ", text[0], " ", text[1]
