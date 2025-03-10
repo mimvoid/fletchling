@@ -30,5 +30,3 @@ proc getUptime*(): string =
       seconds = parseUInt(uptime)
 
     return formatTime(seconds)
-
-  return ""

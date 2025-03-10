@@ -16,8 +16,6 @@ proc getCmdResult*(cmd: string): string =
   if res[1] == 0:
     return res[0].strip
 
-  return ""
-
 
 proc getEnvValues*(envVars: varargs[string]): string =
   ## Takes 1 or more environment variables and
@@ -26,7 +24,5 @@ proc getEnvValues*(envVars: varargs[string]): string =
   ## If none exist, returns an empty string.
 
   for i in items(envVars):
-    if not existsEnv(i): continue
-    return getEnv(i)
-
-  return ""
+    if existsEnv(i):
+      return getEnv(i)

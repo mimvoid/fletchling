@@ -21,8 +21,12 @@ proc getDistro*(): Distro =
     return ("macos", version)
 
   elif os == "windows":
-    let version = getCmdResult("wmic os get caption").split("\r\r\n")[1]
-    return (os, version)
+    let res = getCmdResult("wmic os get caption")
+
+    if res == "":
+      return (os, "")
+
+    return (os, res.split("\r\r\n")[1])
 
   else:
     try:
@@ -31,6 +35,9 @@ proc getDistro*(): Distro =
         osInfo = osReleaseFile()
         name = osInfo.getSectionValue("", "NAME")
         version = osInfo.getSectionValue("", "VERSION_ID")
+
+      if name == "":
+        return (os, version)
 
       return (toLowerAscii(name), version)
     except IOError:

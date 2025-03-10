@@ -33,4 +33,4 @@ proc getHostname*(): string =
   try:
     return uname().nodename
   except OSError:
-    return ""
+    return

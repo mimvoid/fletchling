@@ -57,8 +57,6 @@ func matchPkgCmd(distro: string, t: StringTableRef): string =
     if distro.contains(k):
       return v
 
-  return ""
-
 
 proc countCmdLines(cmd: string): int =
   let cmdResult = getCmdResult(cmd)
@@ -79,7 +77,7 @@ proc getPackages*(distro: string): string =
   elif os == "windows":
     if distro.contains("msys2"):
       return $countCmdLines(pacman)
-    return ""
+    return
 
   elif os == "haiku":
     return $countCmdLines("pkgman search -ia | awk 'FNR > 2 { print }'")
@@ -89,6 +87,6 @@ proc getPackages*(distro: string): string =
     let cmd = matchPkgCmd(distro, t)
 
     if cmd == "":
-      return ""
+      return
 
     return $countCmdLines(cmd)
