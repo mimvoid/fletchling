@@ -3,6 +3,12 @@
 import std/terminal
 
 
+type
+  Colors = tuple
+    ## ANSI colors: red, green, yellow, blue, magenta, cyan, white, black
+    rd, gn, yw, bl, ma, cy, wh, bk: string
+
+
 func col(
   fg: ForegroundColor = fgDefault, bright: bool = false, bold: bool = false
 ): string =
@@ -15,12 +21,6 @@ func col(
     return ansiResetCode & ansiStyleCode(styleBright) & fore
 
   return ansiResetCode & fore
-
-
-type
-  Colors = tuple
-    ## ANSI colors: red, green, yellow, blue, magenta, cyan, white, black
-    rd, gn, yw, bl, ma, cy, wh, bk: string
 
 
 # TODO: make less repetitive
