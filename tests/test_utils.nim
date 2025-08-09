@@ -1,5 +1,5 @@
 import std/unittest
-from ../src/utils/seq import longestItem, maxLen
+from ../src/utils/seqs import longestItem, maxLen
 
 suite "functions in src/utils":
   test "longestItem: empty array":
