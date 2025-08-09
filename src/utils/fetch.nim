@@ -5,16 +5,16 @@ from std/strutils import strip
 from std/envvars import existsEnv, getEnv
 
 
-proc getCmdResult*(cmd: string): string =
+proc getCommandOutput*(cmd: string): string =
   ## Takes a command and returns the result.
   ##
   ## If there is an error, returns an empty string.
 
-  let res = execCmdEx(cmd)
+  let (output, exitCode) = execCmdEx(cmd)
 
   # Check the exit code
-  if res[1] == 0:
-    return res[0].strip
+  if exitCode == 0:
+    return output.strip
 
 
 proc getEnvValues*(envVars: varargs[string]): string =

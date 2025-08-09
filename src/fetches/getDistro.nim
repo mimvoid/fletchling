@@ -4,7 +4,8 @@ from std/posix_utils import osReleaseFile
 from std/parsecfg import loadConfig, getSectionValue
 from std/strutils import toLowerAscii
 
-from ../utils/fetch import getCmdResult
+when system.hostOs == "maxosx" or system.hostOs == "windows":
+  from ../utils/fetch import getCommandOutput
 
 
 type
@@ -17,28 +18,28 @@ proc getDistro*(): Distro =
   const os = system.hostOS
 
   when os == "macosx":
-    let version = getCmdResult("sw_vers -productVersion")
+    let version = getCommandOutput("sw_vers -productVersion")
     return ("macos", version)
 
   elif os == "windows":
-    let res = getCmdResult("wmic os get caption")
+    let output = getCommandOutput("wmic os get caption")
 
-    if res == "":
+    if output == "":
       return (os, "")
 
-    return (os, res.split("\r\r\n")[1])
+    return (os, output.split("\r\r\n")[1])
 
   else:
     try:
       # Read os-release file for linux & bsd distros
       let
         osInfo = osReleaseFile()
-        name = osInfo.getSectionValue("", "NAME")
+        osName = osInfo.getSectionValue("", "NAME")
         version = osInfo.getSectionValue("", "VERSION_ID")
+        name =
+          if osName != "": toLowerAscii(osName)
+          else: os
 
-      if name == "":
-        return (os, version)
-
-      return (toLowerAscii(name), version)
+      return (name, version)
     except IOError:
       return (os, "")

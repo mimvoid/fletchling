@@ -2,12 +2,12 @@
 ## If none are found, return an empty sequence.
 
 import std/tables
-import ./[monoArt, styledArt]
+import ./[artMono, artStyled]
 
 
 proc getMonoArt*(distro: string): seq[string] =
-  return getOrDefault(monoArt.art, distro)
+  return getOrDefault(artMono.art, distro)
 
 
 proc getStyledArt*(distro: string): seq[string] =
-  return getOrDefault(styledArt.art, distro)
+  return getOrDefault(artStyled.art, distro)

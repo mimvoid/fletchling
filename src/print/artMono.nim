@@ -5,7 +5,7 @@ from std/tables import toTable
 from std/strutils import splitLines, alignLeft
 from std/sugar import collect
 
-import ../utils/seq
+from ../utils/seqs import maxLen
 
 
 const
@@ -34,7 +34,7 @@ const
       `` ."""
 
   # by: mimvoid
-  linuxArt* = """
+  linuxArt = """
         __
       '    "
      : ^__^ !
@@ -45,7 +45,7 @@ const
   \ __)---(__ /"""
 
   # by: q60 (from disfetch)
-  nixosArt* = """
+  nixosArt = """
      \\    \\  //
       \\    \\//
   ::::://====\\  //
@@ -64,10 +64,8 @@ func process(artStr: string): seq[string] =
     lines = splitLines(artStr)
     width = maxLen(lines)
 
-    aligned = collect:
-      for i in lines: alignLeft(i, width)
-
-  return aligned
+  return collect:
+    for i in lines: alignLeft(i, width)
 
 
 let art* = {

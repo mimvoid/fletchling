@@ -6,21 +6,20 @@ import std/strtabs
 import ../utils/fetch
 
 
-const
-  apk = "apk info"
-  dpkg = r"dpkg-query -f '.\n' -W"
-  emerge = "qlist -I"
-  kiss = "kiss list"
-  nix = "nix-store -q --requisites ~/.nix-profile"
-  pacman = "pacman -Qq"
-  pmm = "/bedrock/libexec/pmm pacman pmm -Q"
-  rpm = "rpm -qa"
-  slack = "ls /var/log/packages"
-  xbps = "xbps-query -l"
-  zypper = "zypper se"
-
-
 func mapPkgCmd(): StringTableRef =
+  const
+    apk = "apk info"
+    dpkg = r"dpkg-query -f '.\n' -W"
+    emerge = "qlist -I"
+    kiss = "kiss list"
+    nix = "nix-store -q --requisites ~/.nix-profile"
+    pacman = "pacman -Qq"
+    pmm = "/bedrock/libexec/pmm pacman pmm -Q"
+    rpm = "rpm -qa"
+    slack = "ls /var/log/packages"
+    xbps = "xbps-query -l"
+    zypper = "zypper se"
+
   let t = {
     "bedrock": pmm,
     "gentoo": emerge,
@@ -59,13 +58,12 @@ func matchPkgCmd(distro: string, t: StringTableRef): string =
 
 
 proc countCmdLines(cmd: string): int =
-  let cmdResult = getCmdResult(cmd)
+  let cmdResult = getCommandOutput(cmd)
   return len(splitLines(cmdResult))
 
 
 proc getPackages*(distro: string): string =
   const os = system.hostOS
-  let t = mapPkgCmd()
 
   # Handle OS-specific main package managers
   when os == "macosx":
@@ -77,16 +75,14 @@ proc getPackages*(distro: string): string =
   elif os == "windows":
     if distro.contains("msys2"):
       return $countCmdLines(pacman)
-    return
 
   elif os == "haiku":
     return $countCmdLines("pkgman search -ia | awk 'FNR > 2 { print }'")
 
-  # Match the distro to its main package manager
   else:
-    let cmd = matchPkgCmd(distro, t)
-
-    if cmd == "":
-      return
+    # Match the distro to its main package manager
+    let
+      cmdTable = mapPkgCmd()
+      cmd = matchPkgCmd(distro, cmdTable)
 
     return $countCmdLines(cmd)

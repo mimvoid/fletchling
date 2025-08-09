@@ -7,7 +7,7 @@ import
   ./fetches/getDistro,
   ./print/[art, text, fetchResults],
   ./config/vars,
-  ./utils/seq
+  ./utils/seqs
 
 
 # Art
@@ -25,25 +25,23 @@ var finalArt =
   if vars.noColor: monoArt
   else: styledArt
 
-# Padding so the art aligns with the text
+# Vertical padding to align the art with the text
 finalArt = @[artPad] & finalArt
 
 
 # Groups
 
 let
-  groups = styledGroups(vars.nerdFont)  # Categories of info (user, palette, etc.)
-  longer = longestItem(@[monoArt, groups])
+  groups = styledGroups(vars.nerdFont) # Categories of info (user, palette, etc.)
+  lenGroups = len(groups)
 
 # Determine if the art needs more padding for printing
-if longer == groups:
-  finalArt &= artPad.repeat(len(groups) - len(finalArt))
+if lenGroups > len(monoArt):
+  finalArt &= artPad.repeat(lenGroups - len(finalArt))
 
 
 # Printing
 
-# Leading line as extra space before content
-echo ""
-
+echo "" # Leading line as extra space before content
 for (art, text) in zip(finalArt, zip(groups, fetchResults())):
   echo art, "  ", text[0], " ", text[1]

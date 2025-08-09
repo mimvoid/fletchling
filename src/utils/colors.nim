@@ -6,34 +6,34 @@ import std/terminal
 type
   Colors = tuple
     ## ANSI colors: red, green, yellow, blue, magenta, cyan, white, black
-    rd, gn, yw, bl, ma, cy, wh, bk: string
+    wh, rd, gn, yw, bl, ma, cy, bk: string
 
 
-func col(
-  fg: ForegroundColor = fgDefault, bright: bool = false, bold: bool = false
-): string =
+func ansiColor(fg = fgDefault, bright = false, bold = false): string =
   ## Returns the ANSI codes to reset styling and apply foreground color
   ## Optionally adds a bold style code
 
-  let fore = ansiForegroundColorCode(fg, bright)
+  let fgCode = ansiForegroundColorCode(fg, bright)
 
   if bold:
-    return ansiResetCode & ansiStyleCode(styleBright) & fore
+    return ansiResetCode & ansiStyleCode(styleBright) & fgCode
 
-  return ansiResetCode & fore
+  return ansiResetCode & fgCode
 
 
-# TODO: make less repetitive
-func colorList(bright: bool = false, bold: bool = false): Colors =
+func colorList(bright = false, bold = false): Colors =
+  func makeColor(fg: ForegroundColor): string =
+    return ansiColor(fg, bright, bold)
+
   return (
-    rd: col(fgRed, bright, bold),
-    gn: col(fgGreen, bright, bold),
-    yw: col(fgYellow, bright, bold),
-    bl: col(fgBlue, bright, bold),
-    ma: col(fgMagenta, bright, bold),
-    cy: col(fgCyan, bright, bold),
-    wh: col(fgWhite, bright, bold),
-    bk: col(fgBlack, bright, bold)
+    wh: makeColor(fgWhite),
+    rd: makeColor(fgRed),
+    gn: makeColor(fgGreen),
+    yw: makeColor(fgYellow),
+    bl: makeColor(fgBlue),
+    ma: makeColor(fgMagenta),
+    cy: makeColor(fgCyan),
+    bk: makeColor(fgBlack)
   )
 
 

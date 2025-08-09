@@ -14,7 +14,7 @@ proc getUsername*(): string =
   let username = getEnvValues("USERNAME", "USER", "LOGNAME")
 
   if username == "":
-    return getCmdResult("whoami")
+    return getCommandOutput("whoami")
 
   return username
 

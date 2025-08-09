@@ -5,7 +5,7 @@ from std/os import fileExists
 from std/syncio import readFile
 from std/strutils import split
 
-from ../utils/fetch import getCmdResult
+from ../utils/fetch import getCommandOutput
 
 
 proc getKernel*(): string =
@@ -18,7 +18,7 @@ proc getKernel*(): string =
       return
 
   elif os == "windows":
-    let version = getCmdResult("wmic os get Version")
+    let version = getCommandOutput("wmic os get Version")
 
     if version == "":
       return

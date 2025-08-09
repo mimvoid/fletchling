@@ -2,7 +2,7 @@
 ## Maps the art as string sequences to distro names.
 
 import std/[tables, strutils, terminal, sugar]
-import ./monoArt
+import ./artMono
 from ../utils/colors import fgBrBd
 
 
@@ -12,8 +12,8 @@ func oneColor(artSeq: string, color: string): seq[string] =
 
 
 const
-  archArt = oneColor(monoArt.archArt, fgBrBd.bl)
-  debianArt = oneColor(monoArt.debianArt, fgBrBd.rd)
+  archArt = oneColor(artMono.archArt, fgBrBd.bl)
+  debianArt = oneColor(artMono.debianArt, fgBrBd.rd)
 
 func linuxArt(): seq[string] =
   const
@@ -52,10 +52,8 @@ $1     //  \\    $2\\    $3"""
     blue = fgBrBd.bl
     cyan = fgBrBd.cy
 
-    l = collect:
-      for i in splitLines(art): i % [blue, cyan, ansiResetCode]
-
-  return l
+  return collect:
+    for i in splitLines(art): i % [blue, cyan, ansiResetCode]
 
 
 let art* = {
