@@ -39,9 +39,43 @@ Hence, the portmanteau of "fetch" and "fledgling."
 
 _TODO_
 
-## NixOS
+## Nix Flake
 
-_TODO_
+Add `fletchling` to your flake inputs and overlays.
+
+Then you can add it to your packages with `pkgs.fletchling`.
+
+Example:
+
+```nix
+{
+  inputs = {
+    fletchling.url = "github:mimvoid/fletchling";
+  };
+
+  outputs = { self, nixpkgs, ... } @ inputs:
+    let
+      system = "your-system";
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ inputs.fletchling.overlay ];
+      };
+    in
+    {
+      nixosConfigurations."your-hostname" = nixpkgs.lib.nixosSystem {
+        inherit system pkgs;
+        modules = [
+          (
+            { pkgs }:
+            {
+             environment.systemPackages = with pkgs; [ fletchling ];
+            }
+          )
+        ];
+      };
+    };
+}
+```
 
 ---
 
