@@ -10,5 +10,3 @@ const
 
   groupIcons* = ["", "󰌽", "", "", "", "󰥔", "󰏔"]
   groupNames* = ["user", "os", "kernel", "desktop", "shell", "uptime", "pkgs"]
-
-  paletteIcon* = ""

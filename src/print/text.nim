@@ -5,18 +5,18 @@ from std/sequtils import zip
 from std/unicode import alignLeft, runeLen
 from std/strutils import repeat, join
 
-import std/terminal
+import std/[terminal, options]
 
-from ./elems import border, borderColor, groupIcons, groupNames, paletteIcon
+from ./elems import border, borderColor, groupIcons, groupNames
 from ../utils/colors import fg, fgBr, fgBd
 import ../utils/seqs
 
 
-func groups(nerdFont: bool): seq[string] =
+func groups(noNerdFont: bool): seq[string] =
   ## If nerd fonts are enabled, returns strings of group names with icons.
   ## If not, only returns the group names.
 
-  if not nerdFont:
+  if noNerdFont:
     return @groupNames
 
   return collect:
@@ -24,18 +24,18 @@ func groups(nerdFont: bool): seq[string] =
       icon & " " & group
 
 
-func palette(): string =
+func palette(icon: string): string =
   ## Applies foreground colors to display on each copy of an icon.
 
-  const
-    colors = [fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk]
-    paletteIcons = collect:
-      for i in colors: i & paletteIcon & ansiResetCode
+  const colors = [fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk]
+
+  let paletteIcons = collect:
+    for i in colors: i & icon & ansiResetCode
 
   return join(paletteIcons, " ")
 
 
-func styleBorder(colorCode: string, width = 0): seq[string] =
+func makeBorder(colorCode: Option[string], width = 0): seq[string] =
   ## Returns a sequence of strings defining a border:
   ##
   ## The full top and bottom edge, and individual characters for
@@ -49,25 +49,38 @@ func styleBorder(colorCode: string, width = 0): seq[string] =
       border[7] & repeat(border[2], width + 2) & border[6] # bottom
     ]
 
-  return collect:
-    for i in sides: colorCode & i & ansiResetCode
+  if colorCode.isSome():
+    let color = colorCode.get()
+    return collect:
+      for i in sides: color & i & ansiResetCode
+
+  return @sides
 
 
-func styledGroups*(nerdFont: bool): seq[string] =
+func formatGroups*(paletteIcon: string, noFmt, noNerdFont: bool): seq[string] =
   ## Puts the group names, border, and palette together.
 
-  const
-    paletteStr = " " & palette()
-    colors = [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]
-
   let
-    groupList = groups(nerdFont)
+    groupList = groups(noNerdFont)
     width = runeLen(longestItem(groupList))
 
-    sides = styleBorder(borderColor, width)
+  if noFmt:
+    let sides = makeBorder(none(string), width)
+    var groups = @[sides[2]]
 
-    coloredGroups = collect:
-      for (c, g) in zip(colors, groupList):
-        sides[0] & " " & c & alignLeft(g, width) & ansiResetCode & " " & sides[1]
+    for g in groupList:
+      groups.add(sides[0] & " " & alignLeft(g, width) & " " & sides[1])
 
-  return @[sides[2]] & coloredGroups & @[sides[3], paletteStr]
+    groups.add(sides[3])
+    return groups
+
+  let sides = makeBorder(some(borderColor), width)
+  var groups = @[sides[2]]
+  const colors = [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]
+
+  for (c, g) in zip(colors, groupList):
+    groups.add(sides[0] & " " & c & alignLeft(g, width) & ansiResetCode &
+        " " & sides[1])
+
+  groups.add([sides[3], " " & palette(paletteIcon)])
+  return groups

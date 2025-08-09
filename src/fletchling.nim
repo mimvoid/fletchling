@@ -9,39 +9,35 @@ import
   ./config/[vars, optTracker],
   ./utils/seqs
 
+# Categories of info
+let groups = formatGroups(
+  vars.paletteIcon, vars.noFmt.get, vars.noNerdFont.get
+)
+let values = fetchResults()
 
-# Art
+if vars.noArt.get:
+  echo "" # Leading line as extra space before content
+  for (group, value) in zip(groups, values):
+    echo group, " ", value
+else:
+  let
+    (distro, _) = getDistro()
+    monoArt = getMonoArt(distro)
+    styledArt = getStyledArt(distro)
+    artPad = spaces(maxLen(monoArt)) # The same width as the art, used for printing
 
-let
-  (distro, _) = getDistro()
+  var finalArt =
+    if vars.noFmt.get: monoArt
+    else: styledArt
 
-  monoArt = getMonoArt(distro)
-  styledArt = getStyledArt(distro)
+  # Vertical padding to align the art with the text
+  finalArt = @[artPad] & finalArt
 
-  # Spaces the same width as the art, used for printing
-  artPad = spaces(maxLen(monoArt))
+  # Determine if the art needs more padding for printing
+  let lenGroup = len(groups)
+  if lenGroup > len(monoArt):
+    finalArt &= artPad.repeat(lenGroup - len(finalArt))
 
-var finalArt =
-  if vars.noColor.get: monoArt
-  else: styledArt
-
-# Vertical padding to align the art with the text
-finalArt = @[artPad] & finalArt
-
-
-# Groups
-
-let
-  groups = styledGroups(vars.nerdFont.get) # Categories of info (user, palette, etc.)
-  lenGroups = len(groups)
-
-# Determine if the art needs more padding for printing
-if lenGroups > len(monoArt):
-  finalArt &= artPad.repeat(lenGroups - len(finalArt))
-
-
-# Printing
-
-echo "" # Leading line as extra space before content
-for (art, text) in zip(finalArt, zip(groups, fetchResults())):
-  echo art, "  ", text[0], " ", text[1]
+  echo ""
+  for (art, text) in zip(finalArt, zip(groups, values)):
+    echo art, "  ", text[0], " ", text[1]
