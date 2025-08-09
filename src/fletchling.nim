@@ -4,16 +4,15 @@ from std/sequtils import repeat, zip
 from std/strutils import spaces
 
 import
-  ./fetches/getDistro,
-  ./print/[art, text, fetchResults],
   ./config/[vars, optTracker],
+  ./print/[art, text, fetchResults],
   ./utils/seqs
 
 # Categories of info
 let groups = formatGroups(
   vars.paletteIcon, vars.noFmt.get, vars.noNerdFont.get
 )
-let values = fetchResults()
+let (values, distro) = fetchResults()
 
 if vars.noArt.get:
   echo "" # Leading line as extra space before content
@@ -21,22 +20,20 @@ if vars.noArt.get:
     echo group, " ", value
 else:
   let
-    (distro, _) = getDistro()
     monoArt = getMonoArt(distro)
-    styledArt = getStyledArt(distro)
     artPad = spaces(maxLen(monoArt)) # The same width as the art, used for printing
 
-  var finalArt =
-    if vars.noFmt.get: monoArt
-    else: styledArt
+  var finalArt = @[artPad] # Vertical padding to align the art with the text
 
-  # Vertical padding to align the art with the text
-  finalArt = @[artPad] & finalArt
+  if vars.noFmt.get:
+    finalArt.add(monoArt)
+  else:
+    finalArt.add(getStyledArt(distro))
 
   # Determine if the art needs more padding for printing
-  let lenGroup = len(groups)
-  if lenGroup > len(monoArt):
-    finalArt &= artPad.repeat(lenGroup - len(finalArt))
+  let lenDiff = len(groups) - len(finalArt)
+  if lenDiff > 0:
+    finalArt.add(artPad.repeat(lenDiff))
 
   echo ""
   for (art, text) in zip(finalArt, zip(groups, values)):

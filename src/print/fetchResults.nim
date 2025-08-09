@@ -8,9 +8,6 @@ func processName(username: string, hostname: string): string =
   if hostname == "":
     return username
 
-  if username == "":
-    return "@" & hostname
-
   return username & "@" & hostname
 
 
@@ -24,11 +21,11 @@ func processDistro(distro: string, version: string): string =
   return distro & " " & version
 
 
-proc fetchResults*(): array[10, string] =
+proc fetchResults*(): tuple[values: array[10, string], distro: string] =
   let (distro, version) = getDistro()
 
   # Empty strings as padding to align with the group names and palette
-  return [
+  return ([
     "",
     processName(getUsername(), getHostname()),
     processDistro(distro, version),
@@ -39,4 +36,4 @@ proc fetchResults*(): array[10, string] =
     getPackages(distro),
     "",
     ""
-  ]
+  ], distro)

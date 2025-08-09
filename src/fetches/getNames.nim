@@ -20,13 +20,11 @@ proc getUsername*(): string =
 
 
 proc getHostname*(): string =
-  const
-    hostFile = "/etc/hostname"
-    hostRc = "/etc/conf.d/hostname"
-
+  const hostFile = "/etc/hostname"
   if hostFile.fileExists():
     return readFile(hostFile).strip
 
+  const hostRc = "/etc/conf.d/hostname"
   if hostRc.fileExists():
     return loadConfig(hostRc).getSectionValue("", "hostname")
 

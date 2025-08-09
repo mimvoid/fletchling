@@ -28,12 +28,10 @@ $1   ( $2'$2     /  )$4
 $3  .--.     .--,$4
 $3  \ __)$2---$3(__ /$4"""
 
-    black = fgBrBd.bk
-    white = fgBrBd.wh
-    yellow = fgBrBd.yw
+    ansiCodes = [fgBrBd.bk, fgBrBd.wh, fgBrBd.yw, ansiResetCode]
 
   return collect:
-    for i in splitLines(art): i % [black, white, yellow, ansiResetCode]
+    for i in splitLines(art): i % ansiCodes
 
 
 func nixosArt(): seq[string] =
@@ -49,11 +47,10 @@ $2   //  $1\\$2====//::::: $3
 $1      //\\    $2\\     $3
 $1     //  \\    $2\\    $3"""
 
-    blue = fgBrBd.bl
-    cyan = fgBrBd.cy
+    ansiCodes = [fgBrBd.bl, fgBrBd.cy, ansiResetCode]
 
   return collect:
-    for i in splitLines(art): i % [blue, cyan, ansiResetCode]
+    for i in splitLines(art): i % ansiCodes
 
 
 let art* = {

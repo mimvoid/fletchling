@@ -4,8 +4,12 @@ func longestItem*[T](s: openArray[T]): T =
   ##
   ## In case of a tie, returns the first found.
 
+  var maxLen = -1
+
   for i in s:
-    if len(i) > len(result):
+    let length = len(i)
+    if length > maxLen:
+      maxLen = length
       result = i
 
 func maxLen*[T](s: openArray[T]): int =
@@ -14,5 +18,6 @@ func maxLen*[T](s: openArray[T]): int =
   ## Note: This doesn't work well with `runes`.
 
   for i in s:
-    if len(i) > result:
-      result = len(i)
+    let length = len(i)
+    if length > result:
+      result = length
