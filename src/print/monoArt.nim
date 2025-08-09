@@ -9,6 +9,41 @@ import ../utils/seq
 
 
 const
+  # by: mimvoid
+  archArt* = """
+        .
+       / \
+      /   \
+     ,\    \
+    /       \
+   /   .-.   \
+  /   !   !  -.
+ /  _.     ._  \
+..-           -.."""
+
+  # by: mimvoid
+  debianArt* = """
+    ""'""::.
+  "'"      ""\
+ '"   .--.  :::
+""   :    ,  ""
+""    ._    ""
+ "'      ""'`
+  ""
+    ".
+      `` ."""
+
+  # by: mimvoid
+  linuxArt* = """
+        __
+      '    "
+     : ^__^ !
+     .<___" .
+    / .    . \
+   ( '     /  )
+  .--.     .--,
+  \ __)---(__ /"""
+
   # by: q60 (from disfetch)
   nixosArt* = """
      \\    \\  //
@@ -36,5 +71,8 @@ func process(artStr: string): seq[string] =
 
 
 let art* = {
+  "arch": process(archArt),
+  "debian": process(debianArt),
+  "linux": process(linuxArt),
   "nixos": process(nixosArt)
 }.toTable

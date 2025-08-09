@@ -2,7 +2,18 @@
 ## Maps the art as string sequences to distro names.
 
 import std/[tables, strutils, terminal, sugar]
+import ./monoArt
 from ../utils/colors import fgBrBd
+
+
+func oneColor(artSeq: string, color: string): seq[string] =
+  return collect:
+    for i in splitLines(artSeq): color & i & ansiResetCode
+
+
+const
+  archArt = oneColor(monoArt.archArt, fgBrBd.bl)
+  debianArt = oneColor(monoArt.debianArt, fgBrBd.rd)
 
 
 func nixosArt(): seq[string] =
@@ -28,5 +39,7 @@ $1     //  \\    $2\\    $3"""
 
 
 let art* = {
+  "arch": archArt,
+  "debian": debianArt,
   "nixos": nixosArt()
 }.toTable
