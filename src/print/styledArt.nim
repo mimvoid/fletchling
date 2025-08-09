@@ -15,6 +15,26 @@ const
   archArt = oneColor(monoArt.archArt, fgBrBd.bl)
   debianArt = oneColor(monoArt.debianArt, fgBrBd.rd)
 
+func linuxArt(): seq[string] =
+  const
+    # by: mimvoid
+    art = """
+$1        __     $4
+$1      '    "   $4
+$1     : $2^$3__$2^$1 !  $4
+$1     .$3<___"$1 .  $4
+$1    / $2.$1    . \ $4
+$1   ( $2'$2     /  )$4
+$3  .--.     .--,$4
+$3  \ __)$2---$3(__ /$4"""
+
+    black = fgBrBd.bk
+    white = fgBrBd.wh
+    yellow = fgBrBd.yw
+
+  return collect:
+    for i in splitLines(art): i % [black, white, yellow, ansiResetCode]
+
 
 func nixosArt(): seq[string] =
   const
@@ -41,5 +61,6 @@ $1     //  \\    $2\\    $3"""
 let art* = {
   "arch": archArt,
   "debian": debianArt,
+  "linux": linuxArt(),
   "nixos": nixosArt()
 }.toTable
