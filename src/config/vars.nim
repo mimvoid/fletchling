@@ -12,7 +12,7 @@ var
   noFmt* = initOptTracker(false)
   noNerdFont* = initOptTracker(false)
   noArt* = initOptTracker(false)
-  paletteIcon* = ""
+  paletteIcon* = initOptTracker("")
 
 
 # Parse command line arguments
@@ -26,6 +26,8 @@ for kind, key, val in getopt():
       noNerdFont.setBoolArg(val)
     of "no-art":
       noArt.setBoolArg(val)
+    of "palette-icon":
+      paletteIcon.set(val)
   of cmdShortOption:
     case key:
     of "F":
@@ -34,6 +36,8 @@ for kind, key, val in getopt():
       noNerdFont.setBoolArg(val)
     of "A":
       noArt.setBoolArg(val)
+    of "P":
+      paletteIcon.set(val)
   of cmdArgument, cmdEnd:
     discard
 
@@ -52,6 +56,9 @@ if fileExists(configFile):
   if not noArt.isSet:
     noArt.setParse(cfg.getSectionValue("", "noArt"))
 
+  if not paletteIcon.isSet:
+    paletteIcon.set(cfg.getSectionValue("", "paletteIcon"))
 
-if noNerdFont.get:
-  paletteIcon = "@"
+
+if (not paletteIcon.isSet) and noNerdFont.get:
+  paletteIcon.set("@")

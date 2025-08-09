@@ -10,7 +10,7 @@ import
 
 # Categories of info
 let groups = formatGroups(
-  vars.paletteIcon, vars.noFmt.get, vars.noNerdFont.get
+  vars.paletteIcon.get, vars.noFmt.get, vars.noNerdFont.get
 )
 let (values, distro) = fetchResults()
 
