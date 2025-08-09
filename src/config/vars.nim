@@ -1,40 +1,43 @@
 ## Defines default configuration settings and checks for custom settings.
 ##
 ## In level of importance:
-## Default values < Config file < Commandline arguments
+## Default values < Config file < Command line arguments
 
+import std/[parsecfg, parseopt]
 from std/os import fileExists
-from std/appdirs import getConfigDir
-import std/[strutils, paths, parsecfg]
+import ./[readConfig, optTracker]
 
 
-# Default settings
 var
-  noColor* = false
-  nerdFont* = true
-  showArt* = true
-  overrideArt* = false
-  customArt* = ""
+  noColor* = initOptTracker(false)
+  nerdFont* = initOptTracker(true)
+  showArt* = initOptTracker(true)
 
 
-func getVal[T](cfg: Config, section, key: string, parser: proc, default: T): T =
-  let val = cfg.getSectionValue(section, key)
+# Parse command line arguments
+for kind, key, val in getopt():
+  case kind:
+  of cmdLongOption:
+    case key:
+    of "no-color":
+      noColor.setBoolArg(val)
+    of "nerd-font":
+      nerdFont.setBoolArg(val)
+    of "show-art":
+      showArt.setBoolArg(val)
+  of cmdShortOption, cmdArgument, cmdEnd:
+    discard
 
-  try:
-    return parser(val)
-  except ValueError:
-    return default
 
-
-# Get config file settings
-let configFile = $getConfigDir().absolutePath & "fletchling/config.ini"
-
-if configFile.fileExists():
+# Parse config file
+if fileExists(configFile):
   let cfg = loadConfig(configFile)
 
-  noColor = cfg.getVal("", "noColor", parseBool, noColor)
-  nerdFont = cfg.getVal("", "nerdFont", parseBool, nerdFont)
+  if not noColor.isSet:
+    noColor.setParse(cfg.getSectionValue("", "noColor"))
 
-  showArt = cfg.getVal("Art", "showArt", parseBool, showArt)
-  overrideArt = cfg.getVal("Art", "overrideArt", parseBool, overrideArt)
-  customArt = cfg.getSectionValue("Art", "customArt", customArt)
+  if not nerdFont.isSet:
+    nerdFont.setParse(cfg.getSectionValue("", "nerdFont"))
+
+  if not showArt.isSet:
+    showArt.setParse(cfg.getSectionValue("", "showArt"))

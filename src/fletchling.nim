@@ -6,7 +6,7 @@ from std/strutils import spaces
 import
   ./fetches/getDistro,
   ./print/[art, text, fetchResults],
-  ./config/vars,
+  ./config/[vars, optTracker],
   ./utils/seqs
 
 
@@ -22,7 +22,7 @@ let
   artPad = spaces(maxLen(monoArt))
 
 var finalArt =
-  if vars.noColor: monoArt
+  if vars.noColor.get: monoArt
   else: styledArt
 
 # Vertical padding to align the art with the text
@@ -32,7 +32,7 @@ finalArt = @[artPad] & finalArt
 # Groups
 
 let
-  groups = styledGroups(vars.nerdFont) # Categories of info (user, palette, etc.)
+  groups = styledGroups(vars.nerdFont.get) # Categories of info (user, palette, etc.)
   lenGroups = len(groups)
 
 # Determine if the art needs more padding for printing
