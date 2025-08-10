@@ -45,42 +45,35 @@ proc parseOptions*(): Option[FletchlingOpts] =
   # Parse command line arguments
   for kind, key, val in getopt():
     case kind:
-    of cmdLongOption:
-      case key:
-      of "help":
+    of cmdLongOption, cmdShortOption:
+      # Shorthands
+      let l = kind == cmdLongOption
+      func long(keyName: string): bool = l and key == keyName
+      func short(keyName: string): bool = (not l) and key == keyName
+
+      if "help".long or "h".short:
         echo(helpMsg)
         return options.none(FletchlingOpts)
-      of "version":
+
+      elif "version".long or "v".short:
         echo(version)
         return options.none(FletchlingOpts)
-      of "no-format":
+
+      elif "no-format".long or "F".short:
         noFmt.setBoolArg(val)
-      of "no-nerd-font":
+
+      elif "no-nerd-font".long or "N".short:
         noNerdFont.setBoolArg(val)
-      of "no-art":
+
+      elif "no-art".long or "A".short:
         noArt.setBoolArg(val)
-      of "palette-icon":
+
+      elif "palette-icon".long or "p".short:
         paletteIcon.set(val)
-      of "border":
+
+      elif "border".long or "b".short:
         borderKind.setParse(val)
-    of cmdShortOption:
-      case key:
-      of "h":
-        echo(helpMsg)
-        return options.none(FletchlingOpts)
-      of "v":
-        echo(version)
-        return options.none(FletchlingOpts)
-      of "F":
-        noFmt.setBoolArg(val)
-      of "N":
-        noNerdFont.setBoolArg(val)
-      of "A":
-        noArt.setBoolArg(val)
-      of "p":
-        paletteIcon.set(val)
-      of "b":
-        borderKind.setParse(val)
+
     of cmdArgument, cmdEnd:
       discard
 
