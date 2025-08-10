@@ -1,10 +1,10 @@
 ## Fetches the shell program
 
 from std/envvars import existsEnv, getEnv
-from std/strutils import split
+from std/strutils import rsplit
 
 
 proc getShell*(): string {.inline.} =
   if existsEnv("SHELL"):
     let shell = getEnv("SHELL")
-    return shell.split("/")[^1]
+    return shell.rsplit('/', maxsplit = 1)[^1]

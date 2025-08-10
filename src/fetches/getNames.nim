@@ -3,7 +3,7 @@
 from std/os import fileExists
 from std/posix_utils import uname
 from std/syncio import readFile
-from std/strutils import strip
+from std/strbasics import strip
 
 import std/parsecfg
 
@@ -29,7 +29,9 @@ proc getHostname*(): string {.inline.} =
 
     const hostFile = "/etc/hostname"
     if hostFile.fileExists():
-      return readFile(hostFile).strip
+      var content = readFile(hostFile)
+      content.strip()
+      return content
 
     const hostRc = "/etc/conf.d/hostname"
     if hostRc.fileExists():

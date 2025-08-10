@@ -18,12 +18,12 @@ proc getDistro*(): Distro {.inline.} =
     return ("macos", version)
 
   elif hostOs == "windows":
-    let output = getCommandOutput("wmic os get caption")
+    var output = getCommandOutput("wmic os get caption")
 
-    if output == "":
-      return (hostOs, "")
+    if output != "":
+      output = output.split("\r\r\n")[1]
 
-    return (hostOs, output.split("\r\r\n")[1])
+    return (hostOs, output)
 
   else:
     try:

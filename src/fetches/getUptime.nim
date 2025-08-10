@@ -25,7 +25,7 @@ func formatTime(seconds: uint): string {.inline.} =
 proc getUptime*(): string {.inline.} =
   try:
     let
-      uptime = readFile("/proc/uptime").split(".")[0]
+      uptime = readFile("/proc/uptime").split('.', maxsplit = 1)[0]
       seconds = parseUInt(uptime)
 
     return formatTime(seconds)

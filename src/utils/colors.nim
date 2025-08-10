@@ -13,12 +13,12 @@ func ansiColor(fg = fgDefault, bright = false, bold = false): string =
   ## Returns the ANSI codes to reset styling and apply foreground color
   ## Optionally adds a bold style code
 
-  let fgCode = ansiForegroundColorCode(fg, bright)
-
+  var coloredStr = ansiResetCode
   if bold:
-    return ansiResetCode & ansiStyleCode(styleBright) & fgCode
+    coloredStr.add(ansiStyleCode(styleBright))
 
-  return ansiResetCode & fgCode
+  coloredStr.add(ansiForegroundColorCode(fg, bright))
+  return coloredStr
 
 
 func colorList(bright = false, bold = false): Colors =

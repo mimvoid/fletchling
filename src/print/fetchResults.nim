@@ -8,7 +8,7 @@ func processName(username: string, hostname: string): string {.inline.} =
   if hostname == "":
     return username
 
-  return username & "@" & hostname
+  return username & '@' & hostname
 
 
 func processDistro(distro: string, version: string): string {.inline.} =
@@ -18,7 +18,7 @@ func processDistro(distro: string, version: string): string {.inline.} =
   if version == "":
     return distro
 
-  return distro & " " & version
+  return distro & ' ' & version
 
 
 proc fetchResults*(): tuple[values: array[10, string], distro: string] =

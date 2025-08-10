@@ -1,7 +1,7 @@
 ## Helpers for fetching information
 
 from std/osproc import execCmdEx
-from std/strutils import strip
+from std/strbasics import strip
 from std/envvars import existsEnv, getEnv
 
 
@@ -10,11 +10,12 @@ proc getCommandOutput*(cmd: string): string =
   ##
   ## If there is an error, returns an empty string.
 
-  let (output, exitCode) = execCmdEx(cmd)
+  var (output, exitCode) = execCmdEx(cmd)
 
   # Check the exit code
   if exitCode == 0:
-    return output.strip
+    output.strip()
+    return output
 
 
 proc getEnvValues*(envVars: varargs[string]): string =

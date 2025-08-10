@@ -5,6 +5,7 @@ const isHaiku = hostOS == "haiku"
 
 when isWindows:
   from ../utils/fetch import getCommandOutput
+  from std/strutils import split
 else:
   from std/posix_utils import uname
   when not isHaiku:
