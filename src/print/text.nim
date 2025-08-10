@@ -1,6 +1,6 @@
 ## Formats, styles, and puts together `fletchling`'s text
 
-from std/sequtils import zip
+from std/sequtils import zip, apply
 from std/unicode import alignLeft, runeLen
 from std/strutils import repeat, join
 
@@ -20,7 +20,7 @@ func groups(noNerdFont: bool): array[7, string] =
     return groupNames
 
   var withIcons = groupIcons
-  for i in 0..high(withIcons):
+  for i in 0..6:
     withIcons[i] &= " " & groupNames[i]
 
   return withIcons
@@ -32,8 +32,8 @@ func palette(icon: string): string =
   var paletteIcons = [
     fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk
   ]
-  for i in 0..high(paletteIcons):
-    paletteIcons[i] &= icon & ansiResetCode
+  for color in mItems(paletteIcons):
+    color &= icon & ansiResetCode
 
   return join(paletteIcons, " ")
 

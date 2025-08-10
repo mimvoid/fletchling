@@ -1,13 +1,10 @@
 ## Fetches the shell program
 
+from std/envvars import existsEnv, getEnv
 from std/strutils import split
-import ../utils/fetch
 
 
 proc getShell*(): string =
-  let shell = getEnvValues("SHELL")
-
-  if shell == "":
-    return
-
-  return shell.split("/")[^1]
+  if existsEnv("SHELL"):
+    let shell = getEnv("SHELL")
+    return shell.split("/")[^1]
