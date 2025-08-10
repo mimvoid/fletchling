@@ -1,7 +1,10 @@
+NIM_COMPILE_CMD ?= nim c --outdir=build
+NIM_RUN_CMD ?= $(NIM_COMPILE_CMD) -r
+
 all:
 
 build:
-	nim c --outdir=build src/fletchling.nim
+	$(NIM_COMPILE_CMD) src/fletchling.nim
 
 run:
-	nim c --outdir=build -r src/fletchling.nim
+	$(NIM_RUN_CMD) src/fletchling.nim
