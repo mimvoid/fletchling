@@ -16,6 +16,7 @@ type FletchlingOpts = tuple
   paletteIcon: string
 
 
+const version = "0.1.0"
 const helpMsg = """
 A light and stylish fetcher written in Nim
 
@@ -24,6 +25,7 @@ Usage:
 
 Options:
   -h, --help          Show this message and exit
+  -v, --version       Show version and exit
   -F, --no-format     Print without color and formatting ANSI codes
   -N, --no-nerd-font  Print without nerd font icons
   -A, --no-art        Print without art
@@ -45,6 +47,9 @@ proc parseOptions*(): Option[FletchlingOpts] =
       of "help":
         echo(helpMsg)
         return options.none(FletchlingOpts)
+      of "version":
+        echo(version)
+        return options.none(FletchlingOpts)
       of "no-format":
         noFmt.setBoolArg(val)
       of "no-nerd-font":
@@ -57,6 +62,9 @@ proc parseOptions*(): Option[FletchlingOpts] =
       case key:
       of "h":
         echo(helpMsg)
+        return options.none(FletchlingOpts)
+      of "v":
+        echo(version)
         return options.none(FletchlingOpts)
       of "F":
         noFmt.setBoolArg(val)
