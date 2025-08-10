@@ -1,33 +1,29 @@
 ## Fetches the distro name and version
 
-from std/posix_utils import osReleaseFile
-from std/parsecfg import loadConfig, getSectionValue
-from std/strutils import toLowerAscii
-
-when system.hostOs == "maxosx" or system.hostOs == "windows":
+when hostOs == "macosx" or hostOs == "windows":
   from ../utils/fetch import getCommandOutput
+  if hostOs == "windows":
+    from std/strutils import split
+else:
+  from std/posix_utils import osReleaseFile
+  from std/parsecfg import loadConfig, getSectionValue
+  from std/strutils import toLowerAscii
 
 
-type
-  Distro = tuple
-    name: string
-    version: string
-
+type Distro = tuple[name, version: string]
 
 proc getDistro*(): Distro =
-  const os = system.hostOS
-
-  when os == "macosx":
+  when hostOs == "macosx":
     let version = getCommandOutput("sw_vers -productVersion")
     return ("macos", version)
 
-  elif os == "windows":
+  elif hostOs == "windows":
     let output = getCommandOutput("wmic os get caption")
 
     if output == "":
-      return (os, "")
+      return (hostOs, "")
 
-    return (os, output.split("\r\r\n")[1])
+    return (hostOs, output.split("\r\r\n")[1])
 
   else:
     try:
@@ -38,8 +34,8 @@ proc getDistro*(): Distro =
         version = osInfo.getSectionValue("", "VERSION_ID")
         name =
           if osName != "": toLowerAscii(osName)
-          else: os
+          else: hostOs
 
       return (name, version)
     except IOError:
-      return (os, "")
+      return (hostOs, "")
