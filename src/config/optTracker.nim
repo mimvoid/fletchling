@@ -19,7 +19,7 @@ func set*[T](opt: OptTracker[T], value: T) =
 
 func setParse*[T](opt: OptTracker[T], value: string) =
   try:
-    if T is bool:
+    when T is bool:
       opt.set(parseBool(value))
     # Other types are unimplemented
   except ValueError:
