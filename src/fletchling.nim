@@ -3,18 +3,17 @@
 from std/sequtils import repeat, zip
 from std/strutils import spaces
 
+from ./config/opts import parseOptions
 import
-  ./config/[vars, optTracker],
   ./print/[art, text, fetchResults],
   ./utils/seqs
 
-# Categories of info
-let groups = formatGroups(
-  vars.paletteIcon.get, vars.noFmt.get, vars.noNerdFont.get
-)
-let (values, distro) = fetchResults()
+let
+  vars = parseOptions()
+  groups = formatGroups(vars.paletteIcon, vars.noFmt, vars.noNerdFont) # Categories of info
+  (values, distro) = fetchResults()
 
-if vars.noArt.get:
+if vars.noArt:
   echo "" # Leading line as extra space before content
   for (group, value) in zip(groups, values):
     echo group, " ", value
@@ -25,7 +24,7 @@ else:
 
   var finalArt = @[artPad] # Vertical padding to align the art with the text
 
-  if vars.noFmt.get:
+  if vars.noFmt:
     finalArt.add(monoArt)
   else:
     finalArt.add(getStyledArt(distro))
