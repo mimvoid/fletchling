@@ -21,7 +21,7 @@ func groups(noNerdFont: bool): array[7, string] =
 
   var withIcons = groupIcons
   for i in 0..6:
-    withIcons[i] &= " " & groupNames[i]
+    withIcons[i] &= ' ' & groupNames[i]
 
   return withIcons
 
@@ -29,13 +29,10 @@ func groups(noNerdFont: bool): array[7, string] =
 func palette(icon: string): string =
   ## Applies foreground colors to display on each copy of an icon.
 
-  var paletteIcons = [
-    fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk
+  const paletteIcons = [
+    fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk, ansiResetCode
   ]
-  for color in mItems(paletteIcons):
-    color &= icon & ansiResetCode
-
-  return join(paletteIcons, " ")
+  return join(paletteIcons, ' ' & icon)
 
 
 func makeBorder(
@@ -56,10 +53,10 @@ func makeBorder(
 
   if colorCode.isSome():
     let color = colorCode.get()
-    sides.left = color & sides.left & ansiResetCode
-    sides.right = color & sides.right & ansiResetCode
-    sides.top = color & sides.top & ansiResetCode
-    sides.bottom = color & sides.bottom & ansiResetCode
+    sides.left = color & sides.left
+    sides.right = color & sides.right
+    sides.top = color & sides.top
+    sides.bottom = color & sides.bottom
 
   return sides
 
@@ -78,7 +75,7 @@ func formatGroups*(
     var groups = @[sides.top]
 
     for g in groupList:
-      groups.add(sides.left & " " & alignLeft(g, width) & " " & sides.right)
+      groups.add(join([sides.left, alignLeft(g, width), sides.right], " "))
 
     groups.add(sides.bottom)
     return groups
@@ -88,8 +85,9 @@ func formatGroups*(
   const colors = [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]
 
   for (c, g) in zip(colors, groupList):
-    groups.add(sides.left & " " & c & alignLeft(g, width) & ansiResetCode &
-        " " & sides.right)
+    groups.add(
+      join([sides.left, c & alignLeft(g, width), sides.right & ansiResetCode], " ")
+    )
 
-  groups.add([sides.bottom, " " & palette(paletteIcon)])
+  groups.add([sides.bottom, palette(paletteIcon)])
   return groups
