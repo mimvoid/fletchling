@@ -21,6 +21,8 @@ func setParse*[T](opt: OptTracker[T], value: string) =
   try:
     when T is bool:
       opt.set(parseBool(value))
+    elif T is enum:
+      opt.set(parseEnum[T](value))
     # Other types are unimplemented
   except ValueError:
     return

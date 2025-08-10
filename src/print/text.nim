@@ -1,14 +1,14 @@
 ## Formats, styles, and puts together `fletchling`'s text
 
-from std/sugar import collect
 from std/sequtils import zip
 from std/unicode import alignLeft, runeLen
 from std/strutils import repeat, join
 
 import std/[terminal, options]
 
-from ./elems import border, borderColor, groupIcons, groupNames
+from ./elems import borderColor, groupIcons, groupNames
 from ../utils/colors import fg, fgBr, fgBd
+import ../config/borders
 import ../utils/seqs
 
 
@@ -38,29 +38,35 @@ func palette(icon: string): string =
   return join(paletteIcons, " ")
 
 
-func makeBorder(colorCode: Option[string], width = 0): seq[string] =
+func makeBorder(
+  kind: Border, colorCode: Option[string], width = 0
+): BorderSides =
   ## Returns a sequence of strings defining a border:
   ##
   ## The full top and bottom edge, and individual characters for
   ## the left and right edge.
 
-  let
-    sides = [
-      border[3], # left
-      border[1], # right
-      border[4] & repeat(border[0], width + 2) & border[5], # top
-      border[7] & repeat(border[2], width + 2) & border[6] # bottom
-    ]
+  let border = getBorderChars(kind)
+  var sides: BorderSides = (
+    border.left,
+    border.right,
+    border.topLeft & repeat(border.top, width + 2) & border.topRight,
+    border.bottomLeft & repeat(border.bottom, width + 2) & border.bottomRight
+  )
 
   if colorCode.isSome():
     let color = colorCode.get()
-    return collect:
-      for i in sides: color & i & ansiResetCode
+    sides.left = color & sides.left & ansiResetCode
+    sides.right = color & sides.right & ansiResetCode
+    sides.top = color & sides.top & ansiResetCode
+    sides.bottom = color & sides.bottom & ansiResetCode
 
-  return @sides
+  return sides
 
 
-func formatGroups*(paletteIcon: string, noFmt, noNerdFont: bool): seq[string] =
+func formatGroups*(
+  borderKind: Border, paletteIcon: string, noFmt, noNerdFont: bool
+): seq[string] =
   ## Puts the group names, border, and palette together.
 
   let
@@ -68,22 +74,22 @@ func formatGroups*(paletteIcon: string, noFmt, noNerdFont: bool): seq[string] =
     width = runeLen(longestItem(groupList))
 
   if noFmt:
-    let sides = makeBorder(none(string), width)
-    var groups = @[sides[2]]
+    let sides = makeBorder(borderKind, none(string), width)
+    var groups = @[sides.top]
 
     for g in groupList:
-      groups.add(sides[0] & " " & alignLeft(g, width) & " " & sides[1])
+      groups.add(sides.left & " " & alignLeft(g, width) & " " & sides.right)
 
-    groups.add(sides[3])
+    groups.add(sides.bottom)
     return groups
 
-  let sides = makeBorder(some(borderColor), width)
-  var groups = @[sides[2]]
+  let sides = makeBorder(borderKind, some(borderColor), width)
+  var groups = @[sides.top]
   const colors = [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]
 
   for (c, g) in zip(colors, groupList):
-    groups.add(sides[0] & " " & c & alignLeft(g, width) & ansiResetCode &
-        " " & sides[1])
+    groups.add(sides.left & " " & c & alignLeft(g, width) & ansiResetCode &
+        " " & sides.right)
 
-  groups.add([sides[3], " " & palette(paletteIcon)])
+  groups.add([sides.bottom, " " & palette(paletteIcon)])
   return groups

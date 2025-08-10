@@ -8,12 +8,13 @@ from std/appDirs import getConfigDir
 from std/os import fileExists
 from std/options import Option, some, none
 
-import ./optTracker
+import ./[borders, optTracker]
 
 
 type FletchlingOpts = tuple
   noFmt, noNerdFont, noArt: bool
   paletteIcon: string
+  borderKind: Border
 
 
 const version = "0.1.0"
@@ -30,6 +31,7 @@ Options:
   -N, --no-nerd-font  Print without nerd font icons
   -A, --no-art        Print without art
   -p, --palette-icon  Character used to display terminal colors
+  -b, --border        Border style, one of "single", "bold", "double", or "rounded"
 """
 
 proc parseOptions*(): Option[FletchlingOpts] =
@@ -38,6 +40,7 @@ proc parseOptions*(): Option[FletchlingOpts] =
     noNerdFont = initOptTracker(false)
     noArt = initOptTracker(false)
     paletteIcon = initOptTracker("")
+    borderKind = initOptTracker(Border.rounded)
 
   # Parse command line arguments
   for kind, key, val in getopt():
@@ -58,6 +61,8 @@ proc parseOptions*(): Option[FletchlingOpts] =
         noArt.setBoolArg(val)
       of "palette-icon":
         paletteIcon.set(val)
+      of "border":
+        borderKind.setParse(val)
     of cmdShortOption:
       case key:
       of "h":
@@ -74,6 +79,8 @@ proc parseOptions*(): Option[FletchlingOpts] =
         noArt.setBoolArg(val)
       of "p":
         paletteIcon.set(val)
+      of "b":
+        borderKind.setParse(val)
     of cmdArgument, cmdEnd:
       discard
 
@@ -95,8 +102,13 @@ proc parseOptions*(): Option[FletchlingOpts] =
     if not paletteIcon.isSet:
       paletteIcon.set(cfg.getSectionValue("", "paletteIcon"))
 
+    if not borderKind.isSet:
+      borderKind.setParse(cfg.getSectionValue("", "border"))
+
 
   if (not paletteIcon.isSet) and noNerdFont.get:
     paletteIcon.set("@")
 
-  return some((noFmt.get, noNerdFont.get, noArt.get, paletteIcon.get))
+  return some(
+    (noFmt.get, noNerdFont.get, noArt.get, paletteIcon.get, borderKind.get)
+  )

@@ -13,7 +13,10 @@ let varOpts = parseOptions()
 if varOpts.isSome:
   let
     vars = varOpts.get()
-    groups = formatGroups(vars.paletteIcon, vars.noFmt, vars.noNerdFont) # Categories of info
+    # Categories of info
+    groups = formatGroups(
+      vars.borderKind, vars.paletteIcon, vars.noFmt, vars.noNerdFont
+    )
     (values, distro) = fetchResults()
 
   if vars.noArt:
