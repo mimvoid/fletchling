@@ -19,10 +19,12 @@ if varOpts.isSome:
     )
     (values, distro) = fetchResults()
 
+  # Store a string to echo it in one go. This is often better than printing many times.
+  var printStr = ""
+
   if vars.noArt:
-    echo "" # Leading line as extra space before content
     for (group, value) in zip(groups, values):
-      echo group, " ", value
+      printStr.add('\n' & group & ' ' & value)
   else:
     let
       monoArt = getMonoArt(distro)
@@ -40,6 +42,7 @@ if varOpts.isSome:
     if lenDiff > 0:
       finalArt.add(artPad.repeat(lenDiff))
 
-    echo ""
     for (art, text) in zip(finalArt, zip(groups, values)):
-      echo art, "  ", text[0], " ", text[1]
+      printStr.add('\n' & art & ' ' & text[0] & ' ' & text[1])
+
+  echo(printStr)
