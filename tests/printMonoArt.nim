@@ -1,4 +1,4 @@
-from ../src/print/artMono import art
+from ../src/art/mono import art
 import ./printArt
 
 printArt(art)

@@ -1,4 +1,4 @@
-from ../src/print/artStyled import art
+from ../src/art/styled import art
 import ./printArt
 
 printArt(art)

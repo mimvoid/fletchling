@@ -6,7 +6,8 @@ from std/options import isSome, get
 
 from ./config/opts import parseOptions
 import
-  ./print/[art, text, fetchResults],
+  ./print/[formatText, fetchResults],
+  ./art/art,
   ./utils/seqs
 
 let varOpts = parseOptions()

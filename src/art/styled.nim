@@ -2,8 +2,8 @@
 ## Maps the art as string sequences to distro names.
 
 import std/[tables, strutils, terminal, sugar]
-import ./artMono
 from ../utils/colors import fgBrBd
+import ./mono
 
 
 func oneColor(artSeq: seq[string], color: string): seq[string] =
@@ -12,8 +12,8 @@ func oneColor(artSeq: seq[string], color: string): seq[string] =
 
 
 const
-  archArt = static: oneColor(artMono.art["arch"], fgBrBd.bl)
-  debianArt = static: oneColor(artMono.art["debian"], fgBrBd.rd)
+  archArt = static: oneColor(mono.art["arch"], fgBrBd.bl)
+  debianArt = static: oneColor(mono.art["debian"], fgBrBd.rd)
 
   # by: mimvoid
   linuxArt = static: """
