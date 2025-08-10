@@ -31,7 +31,7 @@ Options:
   -N, --no-nerd-font  Print without nerd font icons
   -A, --no-art        Print without art
   -p, --palette-icon  Character used to display terminal colors
-  -b, --border        Border style, one of "single", "bold", "double", or "rounded"
+  -b, --border        Border style, one of "none", "single", "bold", "double", or "rounded"
 """
 
 proc parseOptions*(): Option[FletchlingOpts] =

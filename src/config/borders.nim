@@ -6,10 +6,11 @@ type
     left, right, top, bottom: string
 
   Border* = enum
-    single, bold, double, rounded
+    none, single, bold, double, rounded
 
 
 const
+  noBorder*: BorderChars = (" ", "", " ", "", "", "", "", "")
   singleBorder*: BorderChars = ("─", "│", "─", "│", "┌", "┐", "┘", "└")
   boldBorder*: BorderChars = ("━", "┃", "━", "┃", "┏", "┓", "┛", "┗")
   doubleBorder*: BorderChars = ("═", "║", "═", "║", "╔", "╗", "╝", "╚")
@@ -18,6 +19,7 @@ const
 
 func getBorderChars*(enumValue: Border): BorderChars =
   case enumValue:
+  of none: return noBorder
   of single: return singleBorder
   of bold: return boldBorder
   of double: return doubleBorder
