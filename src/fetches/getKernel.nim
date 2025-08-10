@@ -1,32 +1,33 @@
 ## Fetches the kernel version
 
-from std/posix_utils import uname
-from std/os import fileExists
-from std/syncio import readFile
-from std/strutils import split
+const isWindows = hostOS == "windows"
+const isHaiku = hostOS == "haiku"
 
-from ../utils/fetch import getCommandOutput
+when isWindows:
+  from ../utils/fetch import getCommandOutput
+else:
+  from std/posix_utils import uname
+  when not isHaiku:
+    from std/os import fileExists
+    from std/syncio import readFile
+    from std/strutils import split
 
 
 proc getKernel*(): string =
-  const os = system.hostOS
+  when isWindows:
+    let version = getCommandOutput("wmic os get Version")
+    if version != "":
+      return version.split("\r\r\n")[1]
 
-  when os == "haiku":
+  elif isHaiku:
     try:
       return uname().version
     except OSError:
       return
 
-  elif os == "windows":
-    let version = getCommandOutput("wmic os get Version")
-
-    if version == "":
-      return
-
-    return version.split("\r\r\n")[1]
-
-  try:
-    return uname().release
-  except OSError:
-    if "/proc/version".fileExists():
-      return readFile("/proc/version").split[2]
+  else:
+    try:
+      return uname().release
+    except OSError:
+      if "/proc/version".fileExists():
+        return readFile("/proc/version").split()[2]
