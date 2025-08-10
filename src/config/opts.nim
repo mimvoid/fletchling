@@ -6,6 +6,8 @@
 import std/[parsecfg, parseopt, paths]
 from std/appDirs import getConfigDir
 from std/os import fileExists
+from std/options import Option, some, none
+
 import ./optTracker
 
 
@@ -14,7 +16,21 @@ type FletchlingOpts = tuple
   paletteIcon: string
 
 
-proc parseOptions*(): FletchlingOpts =
+const helpMsg = """
+A light and stylish fetcher written in Nim
+
+Usage:
+  fletchling [OPTIONS]
+
+Options:
+  -h, --help          Show this message and exit
+  -F, --no-format     Print without color and formatting ANSI codes
+  -N, --no-nerd-font  Print without nerd font icons
+  -A, --no-art        Print without art
+  -p, --palette-icon  Character used to display terminal colors
+"""
+
+proc parseOptions*(): Option[FletchlingOpts] =
   var
     noFmt = initOptTracker(false)
     noNerdFont = initOptTracker(false)
@@ -26,6 +42,9 @@ proc parseOptions*(): FletchlingOpts =
     case kind:
     of cmdLongOption:
       case key:
+      of "help":
+        echo(helpMsg)
+        return options.none(FletchlingOpts)
       of "no-format":
         noFmt.setBoolArg(val)
       of "no-nerd-font":
@@ -36,6 +55,9 @@ proc parseOptions*(): FletchlingOpts =
         paletteIcon.set(val)
     of cmdShortOption:
       case key:
+      of "h":
+        echo(helpMsg)
+        return options.none(FletchlingOpts)
       of "F":
         noFmt.setBoolArg(val)
       of "N":
@@ -69,4 +91,4 @@ proc parseOptions*(): FletchlingOpts =
   if (not paletteIcon.isSet) and noNerdFont.get:
     paletteIcon.set("@")
 
-  return (noFmt.get, noNerdFont.get, noArt.get, paletteIcon.get)
+  return some((noFmt.get, noNerdFont.get, noArt.get, paletteIcon.get))
