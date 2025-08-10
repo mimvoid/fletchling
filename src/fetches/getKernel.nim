@@ -13,7 +13,7 @@ else:
     from std/strutils import split
 
 
-proc getKernel*(): string =
+proc getKernel*(): string {.inline.} =
   when isWindows:
     let version = getCommandOutput("wmic os get Version")
     if version != "":

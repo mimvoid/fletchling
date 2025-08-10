@@ -5,9 +5,9 @@ import std/tables
 import ./[artMono, artStyled]
 
 
-proc getMonoArt*(distro: string): seq[string] =
+proc getMonoArt*(distro: string): seq[string] {.inline.} =
   return getOrDefault(artMono.art, distro)
 
 
-proc getStyledArt*(distro: string): seq[string] =
+proc getStyledArt*(distro: string): seq[string] {.inline.} =
   return getOrDefault(artStyled.art, distro)

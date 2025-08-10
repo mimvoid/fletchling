@@ -12,7 +12,7 @@ else:
 
 type Distro = tuple[name, version: string]
 
-proc getDistro*(): Distro =
+proc getDistro*(): Distro {.inline.} =
   when hostOs == "macosx":
     let version = getCommandOutput("sw_vers -productVersion")
     return ("macos", version)

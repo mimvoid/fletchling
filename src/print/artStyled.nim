@@ -12,8 +12,8 @@ func oneColor(artSeq: string, color: string): seq[string] =
 
 
 const
-  archArt = oneColor(artMono.archArt, fgBrBd.bl)
-  debianArt = oneColor(artMono.debianArt, fgBrBd.rd)
+  archArt = static: oneColor(artMono.archArt, fgBrBd.bl)
+  debianArt = static: oneColor(artMono.debianArt, fgBrBd.rd)
 
 func linuxArt(): seq[string] =
   const
@@ -53,7 +53,7 @@ $1     //  \\    $2\\    $3"""
     for i in splitLines(art): i % ansiCodes
 
 
-let art* = {
+const art* = static: {
   "arch": archArt,
   "debian": debianArt,
   "linux": linuxArt(),

@@ -4,14 +4,14 @@ import
   ]
 
 
-func processName(username: string, hostname: string): string =
+func processName(username: string, hostname: string): string {.inline.} =
   if hostname == "":
     return username
 
   return username & "@" & hostname
 
 
-func processDistro(distro: string, version: string): string =
+func processDistro(distro: string, version: string): string {.inline.} =
   if distro == "":
     return version
 

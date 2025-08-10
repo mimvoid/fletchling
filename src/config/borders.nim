@@ -10,14 +10,19 @@ type
 
 
 const
-  noBorder*: BorderChars = (" ", "", " ", "", "", "", "", "")
-  singleBorder*: BorderChars = ("─", "│", "─", "│", "┌", "┐", "┘", "└")
-  boldBorder*: BorderChars = ("━", "┃", "━", "┃", "┏", "┓", "┛", "┗")
-  doubleBorder*: BorderChars = ("═", "║", "═", "║", "╔", "╗", "╝", "╚")
-  roundedBorder*: BorderChars = ("─", "│", "─", "│", "╭", "╮", "╯", "╰")
+  noBorder*: BorderChars = static:
+    (" ", "", " ", "", "", "", "", "")
+  singleBorder*: BorderChars = static:
+    ("─", "│", "─", "│", "┌", "┐", "┘", "└")
+  boldBorder*: BorderChars = static:
+    ("━", "┃", "━", "┃", "┏", "┓", "┛", "┗")
+  doubleBorder*: BorderChars = static:
+    ("═", "║", "═", "║", "╔", "╗", "╝", "╚")
+  roundedBorder*: BorderChars = static:
+    ("─", "│", "─", "│", "╭", "╮", "╯", "╰")
 
 
-func getBorderChars*(enumValue: Border): BorderChars =
+func getBorderChars*(enumValue: Border): BorderChars {.inline.} =
   case enumValue:
   of none: return noBorder
   of single: return singleBorder

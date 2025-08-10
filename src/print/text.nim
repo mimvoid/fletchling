@@ -29,7 +29,7 @@ func groups(noNerdFont: bool): array[7, string] =
 func palette(icon: string): string =
   ## Applies foreground colors to display on each copy of an icon.
 
-  const paletteIcons = [
+  const paletteIcons = static: [
     fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk, ansiResetCode
   ]
   return join(paletteIcons, ' ' & icon)
@@ -82,7 +82,7 @@ func formatGroups*(
 
   let sides = makeBorder(borderKind, some(borderColor), width)
   var groups = @[sides.top]
-  const colors = [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]
+  const colors = static: [fgBd.rd, fgBd.yw, fgBd.cy, fgBd.gn, fgBd.bl, fgBd.ma, fgBd.yw]
 
   for (c, g) in zip(colors, groupList):
     groups.add(

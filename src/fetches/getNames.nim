@@ -10,7 +10,7 @@ import std/parsecfg
 import ../utils/fetch
 
 
-proc getUsername*(): string =
+proc getUsername*(): string {.inline.} =
   let username = getEnvValues("USERNAME", "USER", "LOGNAME")
 
   if username == "":
@@ -19,7 +19,7 @@ proc getUsername*(): string =
   return username
 
 
-proc getHostname*(): string =
+proc getHostname*(): string {.inline.} =
   try:
     return uname().nodename
   except OSError:

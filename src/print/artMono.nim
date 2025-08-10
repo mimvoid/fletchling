@@ -68,7 +68,7 @@ func process(artStr: string): seq[string] =
     for i in lines: alignLeft(i, width)
 
 
-let art* = {
+const art* = static: {
   "arch": process(archArt),
   "debian": process(debianArt),
   "linux": process(linuxArt),

@@ -38,7 +38,7 @@ func colorList(bright = false, bold = false): Colors =
 
 
 const
-  fg* = colorList()
-  fgBd* = colorList(bold = true)
-  fgBr* = colorList(bright = true)
-  fgBrBd* = colorList(bright = true, bold = true)
+  fg* = static: colorList()
+  fgBd* = static: colorList(bold = true)
+  fgBr* = static: colorList(bright = true)
+  fgBrBd* = static: colorList(bright = true, bold = true)

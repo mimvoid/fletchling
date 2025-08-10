@@ -1,11 +1,10 @@
 ## Fetches and formats the uptime
 
-from std/os import fileExists
 from std/strformat import fmt
 import std/[strutils, syncio]
 
 
-func formatTime(seconds: uint): string =
+func formatTime(seconds: uint): string {.inline.} =
   ## Formats seconds into minutes, hours, and days.
   ## Example: 1d 9h 42m
 
@@ -23,7 +22,7 @@ func formatTime(seconds: uint): string =
   return fmt"{days}d {hours}h {minutes}m"
 
 
-proc getUptime*(): string =
+proc getUptime*(): string {.inline.} =
   try:
     let
       uptime = readFile("/proc/uptime").split(".")[0]

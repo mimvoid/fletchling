@@ -17,8 +17,8 @@ type FletchlingOpts = tuple
   borderKind: Border
 
 
-const version = "0.1.0"
-const helpMsg = """
+const version = static: "0.1.0"
+const helpMsg = static: """
 A light and stylish fetcher written in Nim
 
 Usage:
@@ -36,11 +36,11 @@ Options:
 
 proc parseOptions*(): Option[FletchlingOpts] =
   var
-    noFmt = initOptTracker(false)
-    noNerdFont = initOptTracker(false)
-    noArt = initOptTracker(false)
-    paletteIcon = initOptTracker("")
-    borderKind = initOptTracker(Border.rounded)
+    noFmt = static: initOptTracker(false)
+    noNerdFont = static: initOptTracker(false)
+    noArt = static: initOptTracker(false)
+    paletteIcon = static: initOptTracker("")
+    borderKind = static: initOptTracker(Border.rounded)
 
   # Parse command line arguments
   for kind, key, val in getopt():

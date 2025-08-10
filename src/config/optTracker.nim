@@ -8,7 +8,7 @@ type
   OptTracker*[T] = ref CopyOptTracker[T]
 
 
-func initOptTracker*[T](initValue: T): OptTracker[T] =
+func initOptTracker*[T](initValue: T): OptTracker[T] {.inline.} =
   OptTracker[T](value: initValue)
 
 func get*[T](opt: OptTracker[T]): T = opt.value

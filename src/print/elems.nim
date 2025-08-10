@@ -5,6 +5,6 @@ from ../utils/colors import fg
 
 # TODO: make configurable
 const
-  borderColor* = fg.cy
-  groupIcons* = ["", "󰌽", "", "", "", "󰥔", "󰏔"]
-  groupNames* = ["user", "os", "kernel", "desktop", "shell", "uptime", "pkgs"]
+  borderColor* = static: fg.cy
+  groupIcons* = static: ["", "󰌽", "", "", "", "󰥔", "󰏔"]
+  groupNames* = static: ["user", "os", "kernel", "desktop", "shell", "uptime", "pkgs"]
