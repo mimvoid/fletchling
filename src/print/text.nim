@@ -12,25 +12,28 @@ from ../utils/colors import fg, fgBr, fgBd
 import ../utils/seqs
 
 
-func groups(noNerdFont: bool): seq[string] =
+func groups(noNerdFont: bool): array[7, string] =
   ## If nerd fonts are enabled, returns strings of group names with icons.
   ## If not, only returns the group names.
 
   if noNerdFont:
-    return @groupNames
+    return groupNames
 
-  return collect:
-    for (icon, group) in zip(groupIcons, groupNames):
-      icon & " " & group
+  var withIcons = groupIcons
+  for i in 0..high(withIcons):
+    withIcons[i] &= " " & groupNames[i]
+
+  return withIcons
 
 
 func palette(icon: string): string =
   ## Applies foreground colors to display on each copy of an icon.
 
-  const colors = [fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk]
-
-  let paletteIcons = collect:
-    for i in colors: i & icon & ansiResetCode
+  var paletteIcons = [
+    fgBr.wh, fgBr.rd, fgBr.gn, fgBr.yw, fgBr.bl, fgBr.ma, fgBr.cy, fgBr.bk
+  ]
+  for i in 0..high(paletteIcons):
+    paletteIcons[i] &= icon & ansiResetCode
 
   return join(paletteIcons, " ")
 
