@@ -13,6 +13,9 @@ func oneColor(artSeq: seq[string], color: string): seq[string] =
 
 const
   archArt = static: oneColor(mono.art["arch"], fgBrBd.bl)
+  artixArt = static: oneColor(mono.art["artix"], fgBrBd.bl)
+  archcraftArt = static: oneColor(mono.art["archcraft"], fgBrBd.gn)
+  arcolinuxArt = static: oneColor(mono.art["arcolinux"], fgBrBd.bl)
   debianArt = static: oneColor(mono.art["debian"], fgBrBd.rd)
 
   # by: mimvoid
@@ -42,6 +45,9 @@ $1     //  \\    $2\\    $3""".format(fgBrBd.bl, fgBrBd.cy,
 
 const art* = static: {
   "arch": archArt,
+  "archcraft": archcraftArt,
+  "arcolinux": arcolinuxArt,
+  "artix": artixArt,
   "debian": debianArt,
   "linux": linuxArt,
   "nixos": nixosArt

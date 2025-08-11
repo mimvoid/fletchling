@@ -22,6 +22,42 @@ const
 ..-           -.."""
 
   # by: mimvoid
+  archcraftArt = """
+        .
+       / \
+      /   \
+     ,\    \
+    /   _   \
+   /  _/ \_  \
+  /  < .-. > -.
+ /  _.>'-'<._  \
+..-           -.."""
+
+  # by: mimvoid
+  arcolinuxArt* = """
+        .
+       / \
+      /   \
+     /  .  \
+    /  / \  \
+   /  /   \  \
+  /  / ----'  \
+ /  /   "'-.   \
+'---        "---'"""
+
+  # by: mimvoid
+  artixArt = """
+        .
+       / \
+      /   \
+     '"._  \
+    /-_  "-_\
+   /   "-._
+  /     _.-" _-
+ /  _."   .-"  \
+.-'         " -.."""
+
+  # by: mimvoid
   debianArt* = """
     ""'""::.
   "'"      "".
@@ -70,6 +106,9 @@ func process(artStr: string): seq[string] =
 
 const art* = static: {
   "arch": process(archArt),
+  "archcraft": process(archcraftArt),
+  "arcolinux": process(arcolinuxArt),
+  "artix": process(artixArt),
   "debian": process(debianArt),
   "linux": process(linuxArt),
   "nixos": process(nixosArt)
