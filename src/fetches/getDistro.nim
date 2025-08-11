@@ -10,12 +10,12 @@ else:
   from std/strutils import toLowerAscii
 
 
-type Distro = tuple[name, version: string]
+type Distro = tuple[name, id, idLike, version: string]
 
 proc getDistro*(): Distro {.inline.} =
   when hostOs == "macosx":
     let version = getCommandOutput("sw_vers -productVersion")
-    return ("macos", version)
+    return (hostOs, hostOs, hostOs, version)
 
   elif hostOs == "windows":
     var output = getCommandOutput("wmic os get caption")
@@ -23,19 +23,26 @@ proc getDistro*(): Distro {.inline.} =
     if output != "":
       output = output.split("\r\r\n")[1]
 
-    return (hostOs, output)
+    return (hostOs, hostOs, hostOs, output)
 
   else:
     try:
       # Read os-release file for linux & bsd distros
+      let osInfo = osReleaseFile()
       let
-        osInfo = osReleaseFile()
-        osName = osInfo.getSectionValue("", "NAME")
-        version = osInfo.getSectionValue("", "VERSION_ID")
         name =
-          if osName != "": toLowerAscii(osName)
+          if (let osName = osInfo.getSectionValue("", "NAME"); osName != ""):
+            toLowerAscii(osName)
           else: hostOs
 
-      return (name, version)
+        id = osInfo.getSectionValue("", "ID")
+        idLike =
+          if (let likeVal = osInfo.getSectionValue("", "ID_LIKE"); likeVal != ""):
+            likeVal
+          else: id
+
+        version = osInfo.getSectionValue("", "VERSION_ID")
+
+      return (name, id, idLike, version)
     except IOError:
-      return (hostOs, "")
+      return (hostOs, hostOs, hostOs, "")

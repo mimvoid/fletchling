@@ -21,8 +21,8 @@ func processDistro(distro: string, version: string): string {.inline.} =
   return distro & ' ' & version
 
 
-proc fetchResults*(): tuple[values: array[10, string], distro: string] =
-  let (distro, version) = getDistro()
+proc fetchResults*(): tuple[values: array[10, string], distroid: string] =
+  let (distro, id, idLike, version) = getDistro()
 
   # Empty strings as padding to align with the group names and palette
   return ([
@@ -33,7 +33,7 @@ proc fetchResults*(): tuple[values: array[10, string], distro: string] =
     getDesktop(),
     getShell(),
     getUptime(),
-    getPackages(distro),
+    getPackages(idLike),
     "",
     ""
-  ], distro)
+  ], id)

@@ -3,71 +3,65 @@
 import ../utils/fetch
 
 const findPkgManager =
-  not (hostOS in ["macosx", "freebsd", "openbsd", "netbsd", "windows"])
+  hostOS notin ["macosx", "freebsd", "openbsd", "netbsd", "windows"]
 
 
 when findPkgManager:
-  from std/strutils import contains, splitLines
-  import std/distros
+  from std/strutils import split
+  import std/tables
 
-  const
-    apk = "apk info | wc -l"
-    dpkg = "dpkg -l | grep -c '^ii'"
-    kiss = "kiss list"
-    nix = "nix-store -q --requisites ~/.nix-profile | wc -l"
-    pacman = "pacman -Qq | wc -l"
-    pmm = "/bedrock/libexec/pmm pacman pmm -Q"
-    portage = "qlist -I | wc -l"
-    rpm = "rpm -qa | wc -l"
-    slack = "ls /var/log/packages | wc -l"
-    xbps = "xbps-query -l | wc -l"
-    zypper = "zypper se -i | wc -l"
+  func mapPkgCmd(): Table[string, string] =
+    const
+      apk = "apk info | wc -l"
+      dpkg = "dpkg -l | grep -c '^ii'"
+      kiss = "kiss list | wc -l"
+      nix = "nix-store -q --requisites ~/.nix-profile | wc -l"
+      pacman = "pacman -Qq | wc -l"
+      pmm = "/bedrock/libexec/pmm pacman pmm -Q | wc -l"
+      portage = "qlist -I | wc -l"
+      rpm = "rpm -qa | wc -l"
+      slack = "ls /var/log/packages -1 | wc -l"
+      xbps = "xbps-query -l | wc -l"
+      zypper = "zypper se -i | wc -l"
 
+    var t = {
+      "bedrock": pmm,
+      "gentoo": portage,
+      "kiss": kiss,
+      "nixos": nix,
+      "slack": slack,
+      "void": xbps
+    }.toTable
 
-  proc getPkgCommand(): string {.inline.} =
-    if detectOs(Ubuntu) or
-        detectOs(Debian) or
-        detectOs(Elementary) or
-        detectOs(Kali) or
-        detectOs(Zorin) or
-        detectOs(MXLinux) or
-        detectOs(Androidx86):
-      return dpkg
+    for i in ["alpine", "postmarket"]:
+      t[i] = apk
 
-    if detectOs(ArchLinux) or
-        detectOs(Artix) or
-        detectOs(Manjaro) or
-        detectOs(Parabola):
-      return pacman
+    for i in ["android", "astra", "debian", "elementary", "linuxmint",
+      "mxlinux", "ubuntu", "zorin", "kali"]:
+      t[i] = dpkg
 
-    if detectOs(Fedora) or detectOs(RedHat) or
-        detectOs(CentOS) or detectOs(Qubes):
-      return rpm
+    for i in ["arch", "archcraft", "artix", "endeavouros", "manjaro",
+      "garuda", "parabola"]:
+      t[i] = pacman
 
-    if detectOs(NixOS): return nix
-    if detectOs(OpenSUSE): return zypper
-    if detectOs(Void): return xbps
-    if detectOs(Gentoo): return portage
-    if detectOs(Alpine): return apk
-    if detectOs(Slackware): return slack
+    for i in ["fedora", "rhel", "centos", "redhat", "qubes"]:
+      t[i] = rpm
 
+    for i in ["suse", "opensuse", "opensuse-tumbleweed", "opensuse-leap"]:
+      t[i] = zypper
 
-  proc countCmdLines(cmd: string): int {.inline.} =
-    let cmdResult = getCommandOutput(cmd)
-    return len(splitLines(cmdResult))
+    return t
 
 
-proc getPackages*(distro: string): string =
+  const pkgCommands = static: mapPkgCmd()
+
+
+proc getPackages*(distroIdLike: string): string =
   when findPkgManager:
-    # It might be possible to use "wc -l" with these too, but I'm not sure
-    if distro == "bedrock":
-      return $countCmdLines(pmm)
-    if distro == "kiss":
-      return $countCmdLines(kiss)
-
-    let cmd = getPkgCommand()
-    if cmd != "":
-      return getCommandOutput(cmd)
+    for id in distroIdLike.split(' '):
+      let cmd = pkgCommands.getOrDefault(id)
+      if cmd != "":
+        return getCommandOutput(cmd)
 
   # Handle OS-specific main package managers
   elif hostOS == "macosx":
