@@ -58,6 +58,18 @@ const
 .-'         " -.."""
 
   # by: mimvoid
+  cachyArt = """
+   .----------
+  /|\        /  []
+ / | -------'.-.
+/  |/        '-'
+----            ..
+\-. \          :  :
+ \ "-\________. ''
+  \ /         /
+   ----------'"""
+
+  # by: mimvoid
   debianArt* = """
     ""'""::.
   "'"      "".
@@ -70,6 +82,30 @@ const
       `` ."""
 
   # by: mimvoid
+  endeavourArt = """
+         .'\.
+       ."/  \".
+      ' "    " '.
+    .' /      "  .
+   "           '  \
+ ,"   "         |  .
+.___ /        _-   :
+    /"'""''""'   _.
+    ---------"'"'"""
+
+  # by: mimvoid
+  garudaArt = """
+     ___________
+    / _________ \
+   / / .       \ \
+  / / /'--------  \
+ / /  -----------./
+/ /  __________  '
+\ \ /_______  /
+ \ \_______/ /
+  \_________/"""
+
+  # by: mimvoid
   linuxArt = """
       __
     '    "
@@ -79,6 +115,18 @@ const
  ( '     /  )
 .--.     .--,
 \ __)---(__ /"""
+
+  # by: mimvoid
+  manjaroArt = """
+.---------. .---.
+|         | |   |
+|    _____! !   |
+|   |  ___  |   |
+|   | |   | |   |
+|   | |   | |   |
+|   | |   | |   |
+|   | |   | |   |
+'---' '---' '---'"""
 
   # by: q60 (from disfetch)
   nixosArt = """
@@ -109,7 +157,11 @@ const art* = static: {
   "archcraft": process(archcraftArt),
   "arcolinux": process(arcolinuxArt),
   "artix": process(artixArt),
+  "cachyos": process(cachyArt),
   "debian": process(debianArt),
+  "endeavouros": process(endeavourArt),
+  "garuda": process(garudaArt),
   "linux": process(linuxArt),
+  "manjaro": process(manjaroArt),
   "nixos": process(nixosArt)
 }.toTable

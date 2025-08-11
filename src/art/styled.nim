@@ -16,7 +16,35 @@ const
   artixArt = static: oneColor(mono.art["artix"], fgBrBd.bl)
   archcraftArt = static: oneColor(mono.art["archcraft"], fgBrBd.gn)
   arcolinuxArt = static: oneColor(mono.art["arcolinux"], fgBrBd.bl)
+  cachyArt = static: oneColor(mono.art["cachyos"], fgBrBd.gn)
   debianArt = static: oneColor(mono.art["debian"], fgBrBd.rd)
+  manjaroArt = static: oneColor(mono.art["manjaro"], fgBrBd.gn)
+
+  # by: mimvoid
+  endeavourArt = static: """
+$1         .$2'\$3.       $4
+$1       ."$2/  \$3".     $4
+$1      ' $2"    "$3 '.   $4
+$1    .' $2/      "$3  .  $4
+$1   "   $2        '$3  \ $4
+$1 ,"   $2"         |$3  .$4
+$1.___ $2/        _-$3   :$4
+    $3/$2"'""''""'$3   _. $4
+    $3---------"'"'   $4""".format(fgBrBd.yw, fgBrBd.ma, fgBrBd.bl,
+      ansiResetCode).splitLines()
+
+  # by: mimvoid
+  garudaArt = static: """
+$1     _____$2______   $3
+$1    / ___$2______ \  $3
+$1   / / .$2       \ \ $3
+$1  / / /'$2--------  \$3
+$1 / /  -$2----------./$3
+$1/ /  _$2_________  ' $3
+$1\ \ /_$2______  /    $3
+$1 \ \_$2______/ /     $3
+$1  \_$2________/      $3""".format(fgBrBd.ma, fgBrBd.bl,
+      ansiResetCode).splitLines()
 
   # by: mimvoid
   linuxArt = static: """
@@ -48,7 +76,11 @@ const art* = static: {
   "archcraft": archcraftArt,
   "arcolinux": arcolinuxArt,
   "artix": artixArt,
+  "cachyos": cachyArt,
   "debian": debianArt,
+  "endeavouros": endeavourArt,
+  "garuda": garudaArt,
   "linux": linuxArt,
+  "manjaro": manjaroArt,
   "nixos": nixosArt
 }.toTable
