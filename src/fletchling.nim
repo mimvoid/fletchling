@@ -2,7 +2,7 @@
 
 from std/sequtils import repeat, zip
 from std/strutils import spaces
-from std/options import isSome, get
+import std/logging
 
 from ./config/opts import parseOptions
 import
@@ -10,40 +10,47 @@ import
   ./art/art,
   ./utils/seqs
 
-let varOpts = parseOptions()
-if varOpts.isSome:
+
+# Register loggers
+var console = newConsoleLogger(
+  fmtStr = "$levelName: ",
+  levelThreshold = lvlNotice
+)
+addHandler(console)
+
+
+let vars = parseOptions()
+let
+  # Categories of info
+  groups = formatGroups(
+    vars.borderKind, vars.paletteIcon, vars.noFmt, vars.noNerdFont
+  )
+  (values, distro) = fetchResults()
+
+# Store a string to echo it in one go. This is often better than printing many times.
+var printStr = ""
+
+if vars.noArt:
+  for (group, value) in zip(groups, values):
+    printStr.add('\n' & group & ' ' & value)
+else:
   let
-    vars = varOpts.get()
-    # Categories of info
-    groups = formatGroups(
-      vars.borderKind, vars.paletteIcon, vars.noFmt, vars.noNerdFont
-    )
-    (values, distro) = fetchResults()
+    monoArt = getMonoArt(distro)
+    artPad = spaces(maxLen(monoArt)) # The same width as the art, used for printing
 
-  # Store a string to echo it in one go. This is often better than printing many times.
-  var printStr = ""
+  var finalArt = @[artPad] # Vertical padding to align the art with the text
 
-  if vars.noArt:
-    for (group, value) in zip(groups, values):
-      printStr.add('\n' & group & ' ' & value)
+  if vars.noFmt:
+    finalArt.add(monoArt)
   else:
-    let
-      monoArt = getMonoArt(distro)
-      artPad = spaces(maxLen(monoArt)) # The same width as the art, used for printing
+    finalArt.add(getStyledArt(distro))
 
-    var finalArt = @[artPad] # Vertical padding to align the art with the text
+  # Determine if the art needs more padding for printing
+  let lenDiff = len(groups) - len(finalArt)
+  if lenDiff > 0:
+    finalArt.add(artPad.repeat(lenDiff))
 
-    if vars.noFmt:
-      finalArt.add(monoArt)
-    else:
-      finalArt.add(getStyledArt(distro))
+  for (art, text) in zip(finalArt, zip(groups, values)):
+    printStr.add('\n' & art & ' ' & text[0] & ' ' & text[1])
 
-    # Determine if the art needs more padding for printing
-    let lenDiff = len(groups) - len(finalArt)
-    if lenDiff > 0:
-      finalArt.add(artPad.repeat(lenDiff))
-
-    for (art, text) in zip(finalArt, zip(groups, values)):
-      printStr.add('\n' & art & ' ' & text[0] & ' ' & text[1])
-
-  echo(printStr)
+echo(printStr)
