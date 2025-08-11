@@ -10,7 +10,7 @@ from ../utils/seqs import maxLen
 
 const
   # by: mimvoid
-  archArt* = """
+  archArt = """
         .
        / \
       /   \
@@ -34,7 +34,7 @@ const
 ..-           -.."""
 
   # by: mimvoid
-  arcolinuxArt* = """
+  arcolinuxArt = """
         .
        / \
       /   \
@@ -70,7 +70,7 @@ const
    ----------'"""
 
   # by: mimvoid
-  debianArt* = """
+  debianArt = """
     ""'""::.
   "'"      "".
  '"   .--.  :::
