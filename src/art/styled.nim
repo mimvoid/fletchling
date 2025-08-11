@@ -20,14 +20,14 @@ const
 
   # by: mimvoid
   linuxArt = static: """
-$1        __     $4
-$1      '    "   $4
-$1     : $2^$3__$2^$1 !  $4
-$1     .$3<___"$1 .  $4
-$1    / $2.$1    . \ $4
-$1   ( $2'$1     /  )$4
-$3  .--.     .--,$4
-$3  \ __)$2---$3(__ /$4""".format(fgBrBd.bk, fgBrBd.wh, fgBrBd.yw,
+$1      __     $4
+$1    '    "   $4
+$1   : $2^$3__$2^$1 !  $4
+$1   .$3<___"$1 .  $4
+$1  / $2.$1    . \ $4
+$1 ( $2'$1     /  )$4
+$3.--.     .--,$4
+$3\ __)$2---$3(__ /$4""".format(fgBrBd.bk, fgBrBd.wh, fgBrBd.yw,
       ansiResetCode).splitLines()
 
   # by: q60 (from disfetch)
