@@ -4,7 +4,7 @@
 
 A light and stylish fetcher written in [Nim](https://nim-lang.org)
 
-<img src="assets/fletchling.png" width="550" alt="Screenshot of fletchling on NixOS">
+<img src="assets/fletchling.webp" width="550" alt="Screenshot of fletchling on NixOS">
 
 </div>
 
