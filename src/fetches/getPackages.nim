@@ -14,6 +14,8 @@ when findPkgManager:
     const
       apk = "apk info | wc -l"
       dpkg = "dpkg -l | grep -c '^ii'"
+      eopkg = "eopkg list-installed | wc -l"
+      guix = "guix package -l | wc -l"
       kiss = "kiss list | wc -l"
       nix = "nix-store -q --requisites ~/.nix-profile | wc -l"
       pacman = "pacman -Qq | wc -l"
@@ -27,27 +29,27 @@ when findPkgManager:
     var t = {
       "bedrock": pmm,
       "gentoo": portage,
+      "guix": guix,
       "kiss": kiss,
       "nixos": nix,
       "slack": slack,
+      "solus": eopkg,
       "void": xbps
     }.toTable
 
-    for i in ["alpine", "postmarket"]:
+    for i in ["alpine", "postmarketos", "chimera"]:
       t[i] = apk
 
-    for i in ["android", "astra", "debian", "elementary", "linuxmint",
-      "mxlinux", "ubuntu", "zorin", "kali"]:
+    for i in ["android", "astra", "debian", "mxlinux", "ubuntu"]:
       t[i] = dpkg
 
-    for i in ["arch", "archcraft", "artix", "endeavouros", "manjaro",
-      "garuda", "parabola"]:
+    for i in ["arch", "artix", "blackarch", "garuda", "kaos", "parabola"]:
       t[i] = pacman
 
-    for i in ["fedora", "rhel", "centos", "redhat", "qubes"]:
+    for i in ["fedora", "rhel", "centos", "mandriva", "openmandriva", "nobara", "qubes"]:
       t[i] = rpm
 
-    for i in ["suse", "opensuse", "opensuse-tumbleweed", "opensuse-leap"]:
+    for i in ["suse", "opensuse"]:
       t[i] = zypper
 
     return t
