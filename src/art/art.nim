@@ -6,8 +6,8 @@ import ./[mono, styled]
 
 
 proc getMonoArt*(distro: string): seq[string] {.inline.} =
-  return getOrDefault(mono.art, distro)
+  return getOrDefault(mono.art, distro, def = mono.art["linux"])
 
 
 proc getStyledArt*(distro: string): seq[string] {.inline.} =
-  return getOrDefault(styled.art, distro)
+  return getOrDefault(styled.art, distro, def = styled.art["linux"])
