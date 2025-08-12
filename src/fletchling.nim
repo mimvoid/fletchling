@@ -7,8 +7,7 @@ import std/logging
 from ./config/opts import parseOptions
 import
   ./print/[formatText, fetchResults],
-  ./art/art,
-  ./utils/seqs
+  ./art/art
 
 
 # Register loggers
@@ -36,7 +35,7 @@ if vars.noArt:
 else:
   let
     monoArt = getMonoArt(distro)
-    artPad = spaces(maxLen(monoArt)) # The same width as the art, used for printing
+    artPad = spaces(len(monoArt[0])) # The width of the art, used for alignment
 
   var finalArt = @[artPad] # Vertical padding to align the art with the text
 
