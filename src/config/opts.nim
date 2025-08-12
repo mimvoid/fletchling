@@ -34,96 +34,103 @@ Options:
   -b, --border        Border style, one of "none", "single", "bold", "double", or "rounded"
 """
 
-proc parseOptions*(): FletchlingOpts =
-  var
-    noFmt = static: initOptTracker(false)
-    noNerdFont = static: initOptTracker(false)
-    noArt = static: initOptTracker(false)
-    paletteIcon = static: initOptTracker("")
-    borderKind = static: initOptTracker(Border.rounded)
+var
+  noFmt = static: initOptTracker(false)
+  noNerdFont = static: initOptTracker(false)
+  noArt = static: initOptTracker(false)
+  paletteIcon = static: initOptTracker("")
+  borderKind = static: initOptTracker(Border.rounded)
 
-  # Parse command line arguments
+
+proc parseArgs() {.inline.} =
+  ## Parse command line arguments
+
   for kind, key, val in getopt():
-    case kind:
-    of cmdLongOption, cmdShortOption:
-      # Shorthands
-      let l = kind == cmdLongOption
-      template isOpt(long, short: string): bool =
-        (l and key == long) or ((not l) and key == short)
+    let long = kind == cmdLongOption
+    if not long and kind != cmdShortOption:
+      continue
 
-      if isOpt("help", "h"):
-        echo(helpMsg)
-        quit(QuitSuccess)
-      elif isOpt("version", "v"):
-        echo(version)
-        quit(QuitSuccess)
+    template isOpt(longName, shortName: string): bool =
+      (long and key == longName) or ((not long) and key == shortName)
+
+    if isOpt("help", "h"):
+      echo(helpMsg)
+      quit(QuitSuccess)
+    elif isOpt("version", "v"):
+      echo(version)
+      quit(QuitSuccess)
+
+    try:
+      if isOpt("no-format", "F"):
+        noFmt.setBoolArg(val)
+
+      elif isOpt("no-nerd-font", "N"):
+        noNerdFont.setBoolArg(val)
+
+      elif isOpt("no-art", "A"):
+        noArt.setBoolArg(val)
+
+      elif isOpt("palette-icon", "p"):
+        paletteIcon.set(val)
+
+      elif isOpt("border", "b"):
+        borderKind.setParse(val)
+
       else:
-        try:
-          if isOpt("no-format", "F"):
-            noFmt.setBoolArg(val)
+        let prefix = if long: "--" else: "-"
+        warn("Skipping unknown option: $1$2".format(prefix, key))
 
-          elif isOpt("no-nerd-font", "N"):
-            noNerdFont.setBoolArg(val)
-
-          elif isOpt("no-art", "A"):
-            noArt.setBoolArg(val)
-
-          elif isOpt("palette-icon", "p"):
-            paletteIcon.set(val)
-
-          elif isOpt("border", "b"):
-            borderKind.setParse(val)
-
-          else:
-            let prefix = if l: "--" else: "-"
-            warn("Skipping unknown option: $1$2".format(prefix, key))
-
-        except ValueError:
-          let prefix = if l: "--" else: "-"
-          if val == "":
-            warn("No value given for option $1$2".format(prefix, key))
-          else:
-            warn("Could not parse option $1$2: $3".format(prefix, key, val))
-
-    of cmdArgument, cmdEnd:
-      discard
+    except ValueError:
+      let prefix = if long: "--" else: "-"
+      if val == "":
+        warn("No value given for option $1$2".format(prefix, key))
+      else:
+        warn("Could not parse option $1$2: $3".format(prefix, key, val))
 
 
-  # Parse config file
+proc parseConfig() {.inline.} =
+  ## Parse config file
+
   let configFile = $(getConfigDir() / Path("fletchling") / Path("config.ini"))
   var f = newFileStream(configFile, fmRead)
+  if f == nil:
+    return
 
-  if f != nil:
-    var cfg: CfgParser
-    cfg.open(f, configFile)
+  var cfg: CfgParser
+  cfg.open(f, configFile)
 
-    template tryParse[T](opt: OptTracker[T], value: string): untyped =
-      if not opt.isSet:
-        try:
-          opt.setParse(value)
-        except ValueError:
-          warn(cfg.warningStr("Couldn't parse value, skipping."))
+  template tryParse[T](opt: OptTracker[T], value: string): untyped =
+    if not opt.isSet:
+      try:
+        opt.setParse(value)
+      except ValueError:
+        warn(cfg.warningStr("Couldn't parse value, skipping."))
 
-    var section = ""
-    while true:
-      var e = cfg.next()
-      case e.kind:
-      of cfgEof: break
-      of cfgSectionStart:
-        section = e.section
-      of cfgKeyValuePair:
-        if section == "":
-          case e.key:
-          of "noFormatting": tryParse(noFmt, e.value)
-          of "noNerdFont": tryParse(noNerdFont, e.value)
-          of "paletteIcon": tryParse(paletteIcon, e.value)
-          of "border": tryParse(borderKind, e.value)
-          else:
-            warn(cfg.warningStr("Skipping unknown option"))
-      of cfgOption:
-        discard
-      of cfgError:
-        error(e.msg)
+  var section = ""
+  while true:
+    var e = cfg.next()
+    case e.kind:
+    of cfgEof: break
+    of cfgSectionStart:
+      section = e.section
+    of cfgKeyValuePair:
+      if section == "":
+        case e.key:
+        of "noFormatting": tryParse(noFmt, e.value)
+        of "noNerdFont": tryParse(noNerdFont, e.value)
+        of "paletteIcon": tryParse(paletteIcon, e.value)
+        of "border": tryParse(borderKind, e.value)
+        else:
+          warn(cfg.warningStr("Skipping unknown option"))
+    of cfgOption:
+      discard
+    of cfgError:
+      error(e.msg)
+
+
+proc parseOptions*(): FletchlingOpts =
+  parseArgs()
+  parseConfig()
 
   if (not paletteIcon.isSet) and noNerdFont.get:
     paletteIcon.set("@")
