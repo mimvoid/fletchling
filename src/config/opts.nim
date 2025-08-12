@@ -4,7 +4,7 @@
 ## Default values < Config file < Command line arguments
 
 import std/[parsecfg, parseopt, paths, streams]
-from std/logging import warn, error
+from std/logging import warn, error, setLogFilter, lvlError, lvlAll
 from std/strutils import format
 from std/appDirs import getConfigDir
 
@@ -32,7 +32,11 @@ Options:
   -A, --no-art        Print without art
   -p, --palette-icon  Character used to display terminal colors
   -b, --border        Border style, one of "none", "single", "bold", "double", or "rounded"
+  -q, --quiet         Disable all logs except errors
+  -V, --verbose       Enable verbose logging
 """
+
+var quiet = false
 
 var
   noFmt = static: initOptTracker(false)
@@ -44,6 +48,10 @@ var
 
 proc parseArgs() {.inline.} =
   ## Parse command line arguments
+
+  # In case any of the arguments is --quiet or -q, store warnings until
+  # every argument is parsed
+  var warns: seq[string] = @[]
 
   for kind, key, val in getopt():
     let long = kind == cmdLongOption
@@ -61,7 +69,14 @@ proc parseArgs() {.inline.} =
       quit(QuitSuccess)
 
     try:
-      if isOpt("no-format", "F"):
+      if isOpt("quiet", "q"):
+        setLogFilter(lvlError)
+        quiet = true
+
+      elif not quiet and isOpt("verbose", "V"):
+        setLogFilter(lvlAll)
+
+      elif isOpt("no-format", "F"):
         noFmt.setBoolArg(val)
 
       elif isOpt("no-nerd-font", "N"):
@@ -78,14 +93,17 @@ proc parseArgs() {.inline.} =
 
       else:
         let prefix = if long: "--" else: "-"
-        warn("Skipping unknown option: $1$2".format(prefix, key))
+        warns.add("Skipping unknown option: $1$2".format(prefix, key))
 
     except ValueError:
       let prefix = if long: "--" else: "-"
       if val == "":
-        warn("No value given for option $1$2".format(prefix, key))
+        warns.add("No value given for option $1$2".format(prefix, key))
       else:
-        warn("Could not parse option $1$2: $3".format(prefix, key, val))
+        warns.add("Could not parse option $1$2: $3".format(prefix, key, val))
+
+  if not quiet:
+    for i in warns: warn(i)
 
 
 proc parseConfig() {.inline.} =
