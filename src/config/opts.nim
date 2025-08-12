@@ -116,6 +116,7 @@ proc parseConfig() {.inline.} =
 
   var cfg: CfgParser
   cfg.open(f, configFile)
+  defer: cfg.close()
 
   template tryParse[T](opt: OptTracker[T], value: string): untyped =
     if not opt.isSet:
