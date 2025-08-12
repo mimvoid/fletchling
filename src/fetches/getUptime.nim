@@ -1,7 +1,8 @@
 ## Fetches and formats the uptime
 
 from std/strformat import fmt
-import std/[strutils, syncio]
+from std/asyncdispatch import waitFor
+import std/[strutils, asyncfile]
 
 
 func formatTime(seconds: uint): string {.inline.} =
@@ -24,10 +25,14 @@ func formatTime(seconds: uint): string {.inline.} =
 
 proc getUptime*(): string {.inline.} =
   try:
+    var f = openAsync("/proc/uptime", fmRead)
+    defer: f.close()
+
     let
-      uptime = readFile("/proc/uptime").split('.', maxsplit = 1)[0]
+      content = waitFor readLine(f)
+      uptime = content.split('.', maxsplit = 1)[0]
       seconds = parseUInt(uptime)
 
     return formatTime(seconds)
-  except IOError:
+  except OSError:
     return

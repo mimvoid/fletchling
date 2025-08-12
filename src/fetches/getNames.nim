@@ -2,10 +2,10 @@
 
 from std/os import fileExists
 from std/posix_utils import uname
-from std/syncio import readFile
 from std/strbasics import strip
 
-import std/parsecfg
+from std/asyncdispatch import waitFor
+import std/[parsecfg, asyncfile]
 
 import ../utils/fetch
 
@@ -27,9 +27,11 @@ proc getHostname*(): string {.inline.} =
     if hostname != "":
       return hostname
 
-    const hostFile = "/etc/hostname"
-    if hostFile.fileExists():
-      var content = readFile(hostFile)
+    if fileExists("/etc/hostname"):
+      let f = openAsync("/etc/hostname", fmRead)
+      defer: f.close()
+
+      var content = waitFor readLine(f)
       content.strip()
       return content
 
