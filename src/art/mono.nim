@@ -70,6 +70,20 @@ const
    ----------'"""
 
   # by: mimvoid
+  centosArt = """
+        .
+       / \
+  .- ---|--- -.
+  |/.   |   .\|
+ ,.  ". | ."  ..
+< |====[ ]====| >
+ `|   ."|".   |'
+  ' ."  |  ". '
+  |\____|____/|
+       \ /
+        '"""
+
+  # by: mimvoid
   debianArt = """
     ""'""::.
   "'"      "".
@@ -170,6 +184,7 @@ const art* = static: {
   "arcolinux": process(arcolinuxArt),
   "artix": process(artixArt),
   "cachyos": process(cachyArt),
+  "centos": process(centosArt),
   "debian": process(debianArt),
   "endeavouros": process(endeavourArt),
   "fedora": process(fedoraArt),

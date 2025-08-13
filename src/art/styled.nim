@@ -21,6 +21,21 @@ const
   manjaroArt = static: oneColor(mono.art["manjaro"], fgBrBd.gn)
 
   # by: mimvoid
+  centosArt = static: """
+$1        .        $5
+$1       / \       $5
+$2  .- ---$1|$3--- -.  $5
+$2  |/.   $1|$3   .\|  $5
+$3 ,$2.  ". $1|$3 ."  .$4. $5
+$3< |====[ ]$4====| >$5
+$3 `$4|   ."$2|$1".   |$4' $5
+$4  ' ."  $2|$1  ". '  $5
+$4  |\____$2|$1____/|  $5
+$2       \ /       $5
+$2        '""".format(fgBrBd.yw, fgBrBd.gn, fgBrBd.ma, fgBrBd.bl,
+      ansiResetCode).splitLines()
+
+  # by: mimvoid
   endeavourArt = static: """
 $1         .$2'\$3.       $4
 $1       ."$2/  \$3".     $4
@@ -89,6 +104,7 @@ const art* = static: {
   "arcolinux": arcolinuxArt,
   "artix": artixArt,
   "cachyos": cachyArt,
+  "centos": centosArt,
   "debian": debianArt,
   "endeavouros": endeavourArt,
   "fedora": fedoraArt,
