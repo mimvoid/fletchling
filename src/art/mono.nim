@@ -58,6 +58,18 @@ const
 .-'         " -.."""
 
   # by: mimvoid
+  bazziteArt = """
+ .-----------.
+'   |_|       "
+|___: :_____   "
+|_(_   _)__ '.  :
+|   |_|    ; :  |
+|   | `___"  ;  ;
+'   '._____."  .
+ ".          ."
+   '--------'"""
+
+  # by: mimvoid
   cachyArt = """
    .----------
   /|\        /  []
@@ -166,6 +178,18 @@ const
      //  \\    \\"""
 
   # by: mimvoid
+  nobaraArt = """
+ __   ______
+'  ".'      ".
+|             .
+|    .---.    |
+|   : .-. >   |
+|   . '-' |   |
+|    "".  |   |
+|   .-. \ |   |
+`___'  \| `___'"""
+
+  # by: mimvoid
   rhelArt = """
       -_---._
      /       \
@@ -194,6 +218,7 @@ const art* = static: {
   "archcraft": process(archcraftArt),
   "arcolinux": process(arcolinuxArt),
   "artix": process(artixArt),
+  "bazzite": process(bazziteArt),
   "cachyos": process(cachyArt),
   "centos": process(centosArt),
   "debian": process(debianArt),
@@ -203,5 +228,6 @@ const art* = static: {
   "linux": process(linuxArt),
   "manjaro": process(manjaroArt),
   "nixos": process(nixosArt),
+  "nobara": process(nobaraArt),
   "rhel": process(rhelArt)
 }.toTable

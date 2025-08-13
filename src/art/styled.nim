@@ -2,7 +2,7 @@
 ## Maps the art as string sequences to distro names.
 
 import std/[tables, strutils, terminal, sugar]
-from ../utils/colors import fgBrBd
+from ../utils/colors import fgBd, fgBrBd
 import ./mono
 
 
@@ -19,6 +19,21 @@ const
   cachyArt = static: oneColor(mono.art["cachyos"], fgBrBd.gn)
   debianArt = static: oneColor(mono.art["debian"], fgBrBd.rd)
   manjaroArt = static: oneColor(mono.art["manjaro"], fgBrBd.gn)
+  nobaraArt = static: oneColor(mono.art["nobara"], fgBrBd.wh)
+
+  # by: mimvoid
+  bazziteArt = """
+$1 .---$3-$1-------.   $5
+$1'   $3|$4_$3|$1       "  $5
+$1|$3__$4_: :_$3____$2   " $5
+$3|_$4(_   _)$3__ '.$2  :$5
+$1|   $4|_|$3    ; :$2  |$5
+$1|   $3| `___"  ;$2  ;$5
+$1'   $3'._____."$2  . $5
+$1 "$2.          ."  $5
+$2   '--------'    $5""".format(fgBrBd.bl, fgBrBd.ma, fgBd.wh,
+      fgBrBd.wh, ansiResetCode).splitLines()
+
 
   # by: mimvoid
   centosArt = static: """
@@ -115,6 +130,7 @@ const art* = static: {
   "archcraft": archcraftArt,
   "arcolinux": arcolinuxArt,
   "artix": artixArt,
+  "bazzite": bazziteArt,
   "cachyos": cachyArt,
   "centos": centosArt,
   "debian": debianArt,
@@ -124,5 +140,6 @@ const art* = static: {
   "linux": linuxArt,
   "manjaro": manjaroArt,
   "nixos": nixosArt,
+  "nobara": nobaraArt,
   "rhel": rhelArt
 }.toTable
