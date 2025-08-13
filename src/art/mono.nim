@@ -210,6 +210,19 @@ const
  "-._           _,'
      '""'""'""''"""
 
+  # by: mimvoid
+  ubuntuArt = """
+             __
+     .-----.|  |
+   ."\\      --
+ __   \`--_    \
+|  | "     "___"
+ --  \     ,---.
+  \   `___'    ;
+   . //     __.
+    "._____|  |
+            --"""
+
 
 func process(artStr: string): seq[string] =
   ## Splits strings by line into sequences of strings.
@@ -241,5 +254,6 @@ const art* = static: {
   "nobara": process(nobaraArt),
   "opensuse-leap": process(opensuseArt),
   "opensuse-tumbleweed": process(opensuseArt),
-  "rhel": process(rhelArt)
+  "rhel": process(rhelArt),
+  "ubuntu": process(ubuntuArt)
 }.toTable

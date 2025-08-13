@@ -125,6 +125,20 @@ $1 "-._           _,'$3
 $1     '""'""'""''   $3""".format(fgBrBd.rd, fgBrBd.bk,
       ansiResetCode).splitLines()
 
+  # by: mimvoid
+  ubuntuArt = """
+$3             __ $4
+$2     .-----.$3|  |$4
+$1   ."\$2\      $3-- $4
+$2 __$1   \$2`--_    \$4
+$2|  |$1 "     $2"___"$4
+$2 --$1  \     $3,---.$4
+$1  \   `$3___'    ;$4
+$1   . /$3/     $1__$3. $4
+$1    "$3._____$1|  | $4
+$1            $1--  $4""".format(fgBrBd.yw, fgBrBd.rd, fgBd.rd,
+      ansiResetCode).splitLines()
+
 
 const art* = static: {
   "arch": archArt,
@@ -144,5 +158,6 @@ const art* = static: {
   "nobara": nobaraArt,
   "opensuse-leap": opensuseArt,
   "opensuse-tumbleweed": opensuseArt,
-  "rhel": rhelArt
+  "rhel": rhelArt,
+  "ubuntu": ubuntuArt
 }.toTable
