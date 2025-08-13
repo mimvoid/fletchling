@@ -34,6 +34,18 @@ $1.___ $2/        _-$3   :$4
       ansiResetCode).splitLines()
 
   # by: mimvoid
+  fedoraArt = static: """
+$1   ..-------.    $3
+$1 ."    $2.---.$1 ".  $3
+$1.     $2:  _  `$1  " $3
+$1|     $2: ; :_;$1   '$3
+$1|  $2.--| |---.$1   |$3
+$1| $2: ,-; |---"$1   ;$3
+$1| $2| '"  ;$1      , $3
+$1|  $2"___"$1      ,  $3
+$1 "__________"'   $3""".format(fgBrBd.bl, fgBrBd.wh, ansiResetCode).splitLines()
+
+  # by: mimvoid
   garudaArt = static: """
 $1     _____$2______   $3
 $1    / ___$2______ \  $3
@@ -79,6 +91,7 @@ const art* = static: {
   "cachyos": cachyArt,
   "debian": debianArt,
   "endeavouros": endeavourArt,
+  "fedora": fedoraArt,
   "garuda": garudaArt,
   "linux": linuxArt,
   "manjaro": manjaroArt,

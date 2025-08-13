@@ -94,6 +94,18 @@ const
     ---------"'"'"""
 
   # by: mimvoid
+  fedoraArt = """
+   ..-------.
+ ."    .---. ".
+.     :  _  `  "
+|     : ; :_;   '
+|  .--| |---.   |
+| : ,-; |---"   ;
+| | '"  ;      ,
+|  "___"      ,
+ "__________"'"""
+
+  # by: mimvoid
   garudaArt = """
      ___________
     / _________ \
@@ -160,6 +172,7 @@ const art* = static: {
   "cachyos": process(cachyArt),
   "debian": process(debianArt),
   "endeavouros": process(endeavourArt),
+  "fedora": process(fedoraArt),
   "garuda": process(garudaArt),
   "linux": process(linuxArt),
   "manjaro": process(manjaroArt),
