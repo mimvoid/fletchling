@@ -20,6 +20,7 @@ const
   debianArt = static: oneColor(mono.art["debian"], fgBrBd.rd)
   manjaroArt = static: oneColor(mono.art["manjaro"], fgBrBd.gn)
   nobaraArt = static: oneColor(mono.art["nobara"], fgBrBd.wh)
+  opensuseArt = static: oneColor(mono.art["opensuse-leap"], fgBrBd.gn)
 
   # by: mimvoid
   bazziteArt = """
@@ -141,5 +142,7 @@ const art* = static: {
   "manjaro": manjaroArt,
   "nixos": nixosArt,
   "nobara": nobaraArt,
+  "opensuse-leap": opensuseArt,
+  "opensuse-tumbleweed": opensuseArt,
   "rhel": rhelArt
 }.toTable

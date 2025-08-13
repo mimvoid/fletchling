@@ -190,6 +190,16 @@ const
 `___'  \| `___'"""
 
   # by: mimvoid
+  opensuseArt = """
+   .-------._ ______
+ ."          "`   _ "
+,    ___         '_' |
+.  .".-.".      `.___;
+|  | (_; |  .-.  ---"
+ .  `--  ,`_\  "_\
+  "-----" """
+
+  # by: mimvoid
   rhelArt = """
       -_---._
      /       \
@@ -229,5 +239,7 @@ const art* = static: {
   "manjaro": process(manjaroArt),
   "nixos": process(nixosArt),
   "nobara": process(nobaraArt),
+  "opensuse-leap": process(opensuseArt),
+  "opensuse-tumbleweed": process(opensuseArt),
   "rhel": process(rhelArt)
 }.toTable
