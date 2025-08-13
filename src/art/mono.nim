@@ -165,6 +165,17 @@ const
       //\\    \\
      //  \\    \\"""
 
+  # by: mimvoid
+  rhelArt = """
+      -_---._
+     /       \
+    /         \
+  _/"._        \
+." "-_ "'-----",-.
+'      "'""'""'   )
+ "-._           _,'
+     '""'""'""''"""
+
 
 func process(artStr: string): seq[string] =
   ## Splits strings by line into sequences of strings.
@@ -191,5 +202,6 @@ const art* = static: {
   "garuda": process(garudaArt),
   "linux": process(linuxArt),
   "manjaro": process(manjaroArt),
-  "nixos": process(nixosArt)
+  "nixos": process(nixosArt),
+  "rhel": process(rhelArt)
 }.toTable

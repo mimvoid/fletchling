@@ -97,6 +97,18 @@ $1      //\\    $2\\     $3
 $1     //  \\    $2\\    $3""".format(fgBrBd.bl, fgBrBd.cy,
       ansiResetCode).splitLines()
 
+  # by: mimvoid
+  rhelArt = """
+$1      -_---._      $3
+$1     /       \     $3
+$1    /         \    $3
+$1  _$2/"._        $1\   $3
+$1." $2"-_ "'-----",$1-. $3
+$1'      $2"'""'""'$1   )$3
+$1 "-._           _,'$3
+$1     '""'""'""''   $3""".format(fgBrBd.rd, fgBrBd.bk,
+      ansiResetCode).splitLines()
+
 
 const art* = static: {
   "arch": archArt,
@@ -111,5 +123,6 @@ const art* = static: {
   "garuda": garudaArt,
   "linux": linuxArt,
   "manjaro": manjaroArt,
-  "nixos": nixosArt
+  "nixos": nixosArt,
+  "rhel": rhelArt
 }.toTable
