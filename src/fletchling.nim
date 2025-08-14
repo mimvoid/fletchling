@@ -1,6 +1,6 @@
 ## `fletchling` by mimvoid
 
-from std/sequtils import repeat, zip
+from std/sequtils import repeat, zip, concat, newSeqWith
 from std/strutils import spaces
 import std/logging
 
@@ -28,28 +28,43 @@ let
 
 # Store a string to echo it in one go. This is often better than printing many times.
 var printStr = ""
+var text = zip(groups, values)
 
 if vars.noArt:
-  for (group, value) in zip(groups, values):
+  for (group, value) in text:
     printStr.add('\n' & group & ' ' & value)
 else:
-  let
-    monoArt = getMonoArt(distro)
-    artPad = spaces(len(monoArt[0])) # The width of the art, used for alignment
+  var finalArt =
+    if vars.noFmt: getMonoArt(distro)
+    else: getStyledArt(distro)
 
-  var finalArt = @[artPad] # Vertical padding to align the art with the text
+  # Vertical alignment
+  let lenDiff = len(finalArt) - len(groups)
 
-  if vars.noFmt:
-    finalArt.add(monoArt)
-  else:
-    finalArt.add(getStyledArt(distro))
-
-  # Determine if the art needs more padding for printing
-  let lenDiff = len(groups) - len(finalArt)
   if lenDiff > 0:
-    finalArt.add(artPad.repeat(lenDiff))
+    if lenDiff >= 2:
+      # Center groups and values vertically
+      let padding = newSeq[(string, string)](lenDiff div 2)
+      text = concat(padding, text, padding)
 
-  for (art, text) in zip(finalArt, zip(groups, values)):
-    printStr.add('\n' & art & ' ' & text[0] & ' ' & text[1])
+    if lenDiff mod 2 == 1:
+      # If there is an odd difference, add another line
+      text.add(("", ""))
+  elif lenDiff < 0:
+    let monoArt =
+      if vars.noFmt: finalArt
+      else: getMonoArt(distro)
+
+    if lenDiff <= -2:
+      # Center art vertically
+      let padding = newSeqWith(-lenDiff div 2, spaces(len(monoArt[0])))
+      finalArt = concat(padding, finalArt, padding)
+
+    if -lenDiff mod 2 == 1:
+      finalArt.add("")
+
+
+  for (art, txt) in zip(finalArt, text):
+    printStr.add('\n' & art & ' ' & txt[0] & ' ' & txt[1])
 
 echo(printStr)
