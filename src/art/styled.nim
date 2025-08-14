@@ -139,6 +139,18 @@ $1    "$3._____$1|  | $4
 $1            $1--  $4""".format(fgBrBd.yw, fgBrBd.rd, fgBd.rd,
       ansiResetCode).splitLines()
 
+  # by: mimvoid
+  voidArt = """
+$1    $2.-------.    $3
+$1  . $2`._____  ".  $3
+$1 " `.  $2___ ".  ' $3
+$1: ." $2."   ". ". :$3
+$1| | $2|       | | |$3
+$1: .  $2.     .  , :$3
+$1 . '. $2"---" $1. $2`. $3
+$1  .  "-----' `.  $3
+$1   '._______.'   $3""".format(fgBd.gn, fgBrBd.gn, ansiResetCode).splitLines()
+
 
 const art* = static: {
   "arch": archArt,
@@ -159,5 +171,6 @@ const art* = static: {
   "opensuse-leap": opensuseArt,
   "opensuse-tumbleweed": opensuseArt,
   "rhel": rhelArt,
-  "ubuntu": ubuntuArt
+  "ubuntu": ubuntuArt,
+  "void": voidArt
 }.toTable
