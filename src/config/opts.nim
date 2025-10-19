@@ -3,12 +3,10 @@
 ## In level of importance:
 ## Default values < Config file < Command line arguments
 
-import std/[parsecfg, parseopt, paths, streams]
+import std/[parseopt, paths, strutils]
 from std/logging import warn, error, setLogFilter, lvlError, lvlAll
-from std/strutils import format
-from std/appDirs import getConfigDir
 
-import ./[borders, optTracker]
+import ./borders
 
 
 type FletchlingOpts = tuple
@@ -36,14 +34,13 @@ Options:
   -V, --verbose       Enable verbose logging
 """
 
-var quiet = false
-
 var
-  noFmt = static: initOptTracker(false)
-  noNerdFont = static: initOptTracker(false)
-  noArt = static: initOptTracker(false)
-  paletteIcon = static: initOptTracker("")
-  borderKind = static: initOptTracker(Border.rounded)
+  quiet = false
+  noFmt = false
+  noNerdFont = false
+  noArt = false
+  paletteIcon = ""
+  borderKind = Border.rounded
 
 
 proc parseArgs() {.inline.} =
@@ -72,25 +69,18 @@ proc parseArgs() {.inline.} =
       if isOpt("quiet", "q"):
         setLogFilter(lvlError)
         quiet = true
-
       elif not quiet and isOpt("verbose", "V"):
         setLogFilter(lvlAll)
-
       elif isOpt("no-format", "F"):
-        noFmt.setBoolArg(val)
-
+        noFmt = parseBool(val)
       elif isOpt("no-nerd-font", "N"):
-        noNerdFont.setBoolArg(val)
-
+        noNerdFont = parseBool(val)
       elif isOpt("no-art", "A"):
-        noArt.setBoolArg(val)
-
+        noArt = parseBool(val)
       elif isOpt("palette-icon", "p"):
-        paletteIcon.set(val)
-
+        paletteIcon = val
       elif isOpt("border", "b"):
-        borderKind.setParse(val)
-
+        borderKind = parseEnum[Border](val)
       else:
         let prefix = if long: "--" else: "-"
         warns.add("Skipping unknown option: $1$2".format(prefix, key))
@@ -106,52 +96,10 @@ proc parseArgs() {.inline.} =
     for i in warns: warn(i)
 
 
-proc parseConfig() {.inline.} =
-  ## Parse config file
-
-  let configFile = $(getConfigDir() / Path("fletchling") / Path("config.ini"))
-  var f = newFileStream(configFile, fmRead)
-  if f == nil:
-    return
-
-  var cfg: CfgParser
-  cfg.open(f, configFile)
-  defer: cfg.close()
-
-  template tryParse[T](opt: OptTracker[T], value: string): untyped =
-    if not opt.isSet:
-      try:
-        opt.setParse(value)
-      except ValueError:
-        warn(cfg.warningStr("Couldn't parse value, skipping."))
-
-  var section = ""
-  while true:
-    var e = cfg.next()
-    case e.kind:
-    of cfgEof: break
-    of cfgSectionStart:
-      section = e.section
-    of cfgKeyValuePair:
-      if section == "":
-        case e.key:
-        of "noFormatting": tryParse(noFmt, e.value)
-        of "noNerdFont": tryParse(noNerdFont, e.value)
-        of "paletteIcon": tryParse(paletteIcon, e.value)
-        of "border": tryParse(borderKind, e.value)
-        else:
-          warn(cfg.warningStr("Skipping unknown option"))
-    of cfgOption:
-      discard
-    of cfgError:
-      error(e.msg)
-
-
 proc parseOptions*(): FletchlingOpts =
   parseArgs()
-  parseConfig()
 
-  if (not paletteIcon.isSet) and noNerdFont.get:
-    paletteIcon.set("@")
+  if paletteIcon == "":
+    paletteIcon = if noNerdFont: "@" else: ""
 
-  return (noFmt.get, noNerdFont.get, noArt.get, paletteIcon.get, borderKind.get)
+  return (noFmt, noNerdFont, noArt, paletteIcon, borderKind)
